@@ -1,12 +1,9 @@
 import React from "react";
 import "./App.css";
+import { PoolGenerateTool } from "./pages/PoolGenerateTool/PoolGenerateTool";
 
 export const App = () => {
-  return (
-    <div className="App">
-      <>Welcome to app</>
-    </div>
-  );
+  return <PoolGenerateTool />;
 };
 
 export default App;
