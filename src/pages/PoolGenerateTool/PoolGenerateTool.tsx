@@ -3,6 +3,7 @@ import { Button, Divider, Input, List } from "rsuite";
 import { pool } from "@bitmatrix/lib";
 import { taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
 import WizData, { hexLE } from "@script-wiz/wiz-data";
+import "./PoolGenerateTool.scss";
 
 export const PoolGenerateTool = () => {
   const [leafCount, setLeafCount] = useState<number>();
