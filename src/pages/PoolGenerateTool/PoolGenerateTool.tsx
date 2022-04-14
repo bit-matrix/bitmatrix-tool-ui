@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Divider, Input, InputGroup, List, Tooltip, Whisper } from "rsuite";
+import { Button, Divider, Input, InputGroup, Tooltip, Whisper } from "rsuite";
 import { pool } from "@bitmatrix/lib";
 import { taproot, TAPROOT_VERSION } from "@script-wiz/lib-core";
 import WizData, { hexLE } from "@script-wiz/wiz-data";
