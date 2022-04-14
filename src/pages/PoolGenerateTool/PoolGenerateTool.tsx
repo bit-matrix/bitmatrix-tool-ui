@@ -250,17 +250,21 @@ export const PoolGenerateTool = () => {
             </Whisper>
           </InputGroup>
 
-          <List>
-            {result?.mainCovenantScript.map((item, index) => (
-              <>
-                <h6>Leaf {index + 1} </h6>
+          <Divider className="pool-generator-tool-divider" />
 
-                <List.Item key={index} index={index}>
-                  {item}
-                </List.Item>
-              </>
-            ))}
-          </List>
+          {result?.mainCovenantScript.map((item, index) => (
+            <div>
+              <h6>Leaf {index + 1} </h6>
+              <InputGroup>
+                <Input key={index} value={item} />
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Leaf {index + 1} copied to clipboard!</Tooltip>}>
+                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(item || "")}>
+                    <CopyIcon width="1rem" height="1rem" />
+                  </InputGroup.Button>
+                </Whisper>
+              </InputGroup>
+            </div>
+          ))}
         </div>
       )}
     </div>
