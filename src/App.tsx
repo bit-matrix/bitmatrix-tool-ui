@@ -1,9 +1,14 @@
 import React from "react";
-import "./App.css";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { PoolGenerateTool } from "./pages/PoolGenerateTool/PoolGenerateTool";
 
-export const App = () => {
-  return <PoolGenerateTool />;
+const App = (): JSX.Element => {
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/" component={PoolGenerateTool} />
+      </Switch>
+    </Router>
+  );
 };
-
 export default App;
