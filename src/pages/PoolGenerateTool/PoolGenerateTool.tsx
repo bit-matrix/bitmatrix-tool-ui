@@ -60,7 +60,9 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={"cd008800c7010088040000000088767651c70100880401000000888852c70100880402000000888853c701008804030000008887"} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Flag covenant script has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button
+                onClick={() => navigator.clipboard.writeText("cd008800c7010088040000000088767651c70100880401000000888852c70100880402000000888853c701008804030000008887" || "")}
+              >
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -70,7 +72,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={"c41dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624"} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Flag covenant control block has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText("c41dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624" || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -80,7 +82,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={"512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55"} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Flag covenant scriptPubkey has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText("512070d3017ab2a8ae4cccdb0537a45fb4a3192bff79c49cf54bd9edd508dcc93f55" || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -90,7 +92,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={"tex1pwrfsz74j4zhyenxmq5m6gha55vvjhlmecjw02j7eah2s3hxf8a2sf9fp5h"} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Flag covenant testnet address has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText("tex1pwrfsz74j4zhyenxmq5m6gha55vvjhlmecjw02j7eah2s3hxf8a2sf9fp5h" || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -100,7 +102,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={"ex1pwrfsz74j4zhyenxmq5m6gha55vvjhlmecjw02j7eah2s3hxf8a2sgumx9c"} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Flag covenant mainnet address has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText("ex1pwrfsz74j4zhyenxmq5m6gha55vvjhlmecjw02j7eah2s3hxf8a2sgumx9c" || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -114,7 +116,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={"20" + hexLE(flagAssetId || "") + "00c86987"} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Token covenant script has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText("20" + hexLE(flagAssetId || "") + "00c86987" || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -124,7 +126,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={singleLeafControlBlock} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Token covenant control block has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(singleLeafControlBlock || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -134,7 +136,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={singleLeafResult.scriptPubkey.hex} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Token covenant scriptPubkey block has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(singleLeafResult.scriptPubkey.hex || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -144,7 +146,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={singleLeafResult.address.testnet} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Token covenant testnet address has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(singleLeafResult.address.testnet || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -154,7 +156,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={singleLeafResult.address.mainnet} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Token covenant mainnet address has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(singleLeafResult.address.mainnet || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -168,7 +170,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={"20" + hexLE(flagAssetId || "") + "00c86987"} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Lp Holder covenant script has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText("20" + hexLE(flagAssetId || "") + "00c86987" || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -178,7 +180,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={singleLeafControlBlock} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Lp Holder covenant control block has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(singleLeafControlBlock || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -188,7 +190,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={singleLeafResult.scriptPubkey.hex} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Lp Holder covenant scriptPubkey has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(singleLeafResult.scriptPubkey.hex || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -198,7 +200,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={singleLeafResult.address.testnet} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Lp Holder covenant testnet address has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(singleLeafResult.address.testnet || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -208,7 +210,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={singleLeafResult.address.mainnet} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Lp Holder covenant mainnet address has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(singleLeafResult.address.mainnet || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -222,7 +224,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={result.taprootResult.address.testnet} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Testnet address has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.taprootResult.address.testnet || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -232,7 +234,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={result.taprootResult.address.mainnet} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Mainnet address has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.taprootResult.address.mainnet || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -242,7 +244,7 @@ export const PoolGenerateTool = () => {
           <InputGroup>
             <Input value={result.taprootResult.scriptPubkey.hex} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Script Pubkey has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.taprootResult.scriptPubkey.hex || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
