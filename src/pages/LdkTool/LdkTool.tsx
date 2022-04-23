@@ -64,36 +64,39 @@ export const LdkTool = () => {
       </Button>
 
       {unblindUtxos && unblindUtxos.length > 0 && (
-        <Table
-          height={900}
-          data={unblindUtxos}
-          onRowClick={(data) => {
-            console.log(data);
-          }}
-        >
-          <Column width={400} align="center" fixed>
-            <HeaderCell>TxId</HeaderCell>
-            <Cell dataKey="txid" />
-          </Column>
+        <>
+          <h6>Unblind utxos : </h6>
+          <Table
+            height={900}
+            data={unblindUtxos}
+            onRowClick={(data) => {
+              console.log(data);
+            }}
+          >
+            <Column width={550} align="center" resizable>
+              <HeaderCell>TxId</HeaderCell>
+              <Cell dataKey="txid" />
+            </Column>
 
-          <Column width={100} align="center">
-            <HeaderCell>Block Height</HeaderCell>
-            <Cell dataKey="status.block_height" />
-          </Column>
+            <Column width={100} align="center" resizable>
+              <HeaderCell>Block Height</HeaderCell>
+              <Cell dataKey="status.block_height" />
+            </Column>
 
-          <Column width={100} align="center">
-            <HeaderCell>Value (sats)</HeaderCell>
-            <Cell dataKey="unblindData.value" rowData={"ahmet"} />
-          </Column>
-          <Column width={200} align="center">
-            <HeaderCell>AssetId</HeaderCell>
-            <Cell>
-              {(rowData) => {
-                return <span>{rowData.unblindData.asset.toString("hex")}</span>;
-              }}
-            </Cell>
-          </Column>
-        </Table>
+            <Column width={100} align="center" resizable>
+              <HeaderCell>Value (sats)</HeaderCell>
+              <Cell dataKey="unblindData.value" rowData={"ahmet"} />
+            </Column>
+            <Column width={550} align="center" resizable>
+              <HeaderCell>AssetId</HeaderCell>
+              <Cell>
+                {(rowData) => {
+                  return <span>{rowData.unblindData.asset.toString("hex")}</span>;
+                }}
+              </Cell>
+            </Column>
+          </Table>
+        </>
       )}
     </div>
   );
