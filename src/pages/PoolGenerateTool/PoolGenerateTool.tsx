@@ -9,7 +9,7 @@ import "./PoolGenerateTool.scss";
 export const PoolGenerateTool = () => {
   const [leafCount, setLeafCount] = useState<number>();
   const [currentIndex, setCurrentIndex] = useState<number>();
-  const [pair1, setPair1] = useState<number>();
+  const [pair1, setPair1] = useState<number>(20);
   const [flagAssetId, setFlagAssetId] = useState<string>();
   const [result, setResult] = useState<{
     mainCovenantScript: string[];
