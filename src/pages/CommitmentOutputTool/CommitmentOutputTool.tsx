@@ -73,6 +73,16 @@ export const CommitmentOutputTool = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
+
+          <h6>Control Block</h6>
+          <InputGroup>
+            <Input value={result.controlBlock} disabled />
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Control block has been copied to clipboard!</Tooltip>}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.controlBlock || "")}>
+                <CopyIcon width="1rem" height="1rem" />
+              </InputGroup.Button>
+            </Whisper>
+          </InputGroup>
         </>
       )}
     </div>
