@@ -9,6 +9,7 @@ import "./PoolGenerateTool.scss";
 export const PoolGenerateTool = () => {
   const [leafCount, setLeafCount] = useState<number>();
   const [currentIndex, setCurrentIndex] = useState<number>();
+  const [pair1, setPair1] = useState<number>(20);
   const [flagAssetId, setFlagAssetId] = useState<string>();
   const [result, setResult] = useState<{
     mainCovenantScript: string[];
@@ -22,7 +23,7 @@ export const PoolGenerateTool = () => {
     const script = [WizData.fromHex("20" + hexLE(flagAssetId || "") + "00c86987")];
     const pubkey = WizData.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
 
-    setResult(pool.createCovenants(leafCount! - 1, currentIndex!, flagAssetId!));
+    setResult(pool.createCovenantsV2(leafCount! - 1, currentIndex!, flagAssetId!, pair1));
     setSingleLeafResult(taproot.tapRoot(pubkey, script, TAPROOT_VERSION.LIQUID));
     setSingleLeafControlBlock(taproot.controlBlockCalculation(script, "c4", pubkey.hex, currentIndex || 0));
   };
@@ -35,6 +36,8 @@ export const PoolGenerateTool = () => {
       <Input type="number" value={currentIndex} onChange={(value: string) => setCurrentIndex(Number(value.replace(/\s/g, "")))} />
       <h6>Flag Asset Id</h6>
       <Input type="text" value={flagAssetId} onChange={(value: string) => setFlagAssetId(value.replace(/\s/g, ""))} />
+      <h6>Pair 1 Coefficient </h6>
+      <Input type="number" value={pair1} onChange={(value: string) => setPair1(Number(value.replace(/\s/g, "")))} />
 
       <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={calculateResult}>
         Calculate
