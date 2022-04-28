@@ -23,7 +23,7 @@ export const PoolGenerateTool = () => {
     const script = [WizData.fromHex("20" + hexLE(flagAssetId || "") + "00c86987")];
     const pubkey = WizData.fromHex("1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624");
 
-    setResult(pool.createCovenantsV2(leafCount! - 1, currentIndex!, flagAssetId!, pair1));
+    setResult(pool.createCovenants(leafCount! - 1, currentIndex!, flagAssetId!, pair1));
     setSingleLeafResult(taproot.tapRoot(pubkey, script, TAPROOT_VERSION.LIQUID));
     setSingleLeafControlBlock(taproot.controlBlockCalculation(script, "c4", pubkey.hex, currentIndex || 0));
   };
