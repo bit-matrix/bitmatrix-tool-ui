@@ -151,6 +151,12 @@ export const LdkTool2 = () => {
     }
   };
 
+  // const disconnectWallet = () => {
+  //   if (marinaa) {
+  //     marinaa.disable();
+  //   }
+  // };
+
   return (
     <div className="pool-generator-tool-container">
       {loading && <Loader backdrop content="loading..." vertical style={{ zIndex: 999 }} />}
@@ -163,6 +169,10 @@ export const LdkTool2 = () => {
       <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={signTransaction}>
         Sign Transaction
       </Button>
+
+      {/* <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={disconnectWallet}>
+        Disconnect wallet
+      </Button> */}
     </div>
   );
 };
