@@ -14,6 +14,7 @@ declare global {
 
 export const LdkTool2 = () => {
   const [address, setAddress] = useState<string>("");
+  const [data, setData] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [marinaa, setMarinaa] = useState<MarinaProvider>();
 
@@ -79,7 +80,7 @@ export const LdkTool2 = () => {
 
       // 2. add a custom OP_RETURN output to psbt
       pset.addOutput({
-        script: script.compile([script.OPS.OP_RETURN, Buffer.from("Sampiyon Fenerbahce", "utf-8")]),
+        script: script.compile([script.OPS.OP_RETURN, Buffer.from(data, "hex")]),
         value: confidential.satoshiToConfidentialValue(0),
         asset: AssetHash.fromHex(networks.testnet.assetHash, false).bytes,
         nonce: Buffer.alloc(0),
@@ -89,9 +90,9 @@ export const LdkTool2 = () => {
       const recipients = [
         {
           asset: networks.testnet.assetHash,
-          value: 1907000,
+          value: 5000,
           //P2TR address
-          address: "tex1p8la3943se4gc5kxn664ez6d7zq2q34f8mnsfmcylfjzapsyegvfq73avft",
+          address,
         },
       ];
 
@@ -156,8 +157,11 @@ export const LdkTool2 = () => {
       <h6>Address</h6>
       <Input type="text" value={address} onChange={(value: string) => setAddress(value.replace(/\s/g, ""))} />
 
+      <h6>OP_RETURN Script Data (HEX)</h6>
+      <Input type="text" value={data} onChange={(value: string) => setData(value.replace(/\s/g, ""))} />
+
       <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={signTransaction}>
-        xxx
+        Sign Transaction
       </Button>
     </div>
   );
