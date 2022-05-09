@@ -3,7 +3,6 @@ import { AssetHash, confidential, networks, Psbt, script, address as liquidAddre
 import { detectProvider, MarinaProvider } from "marina-provider";
 import { useEffect, useState } from "react";
 import { Button, Input, Loader } from "rsuite";
-import { api } from "@bitmatrix/lib";
 import * as ecc from "tiny-secp256k1";
 
 declare global {
@@ -145,9 +144,16 @@ export const LdkTool2 = () => {
       const finalTx = Psbt.fromBase64(signedTx);
       finalTx.finalizeAllInputs();
 
-      const txId = await api.sendRawTransaction(finalTx.extractTransaction().toHex());
+      console.log("Raw tx:", finalTx.extractTransaction().toHex());
+      console.log("Signed Tx:", signedTx);
 
-      window.open("https://liquid.network/tr/testnet/tx/" + txId, "_blank");
+      const txId = await marinaa.broadcastTransaction(signedTx);
+
+      console.log("result", txId);
+
+      // const txId = await api.sendRawTransaction(finalTx.extractTransaction().toHex());
+
+      // window.open("https://liquid.network/tr/testnet/tx/" + txId, "_blank");
     }
   };
 
