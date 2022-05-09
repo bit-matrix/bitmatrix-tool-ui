@@ -142,18 +142,12 @@ export const LdkTool2 = () => {
 
       // 7. Broadcast the transaction to the network (need to ba added to Marina)
       const finalTx = Psbt.fromBase64(signedTx);
+
       finalTx.finalizeAllInputs();
 
-      console.log("Raw tx:", finalTx.extractTransaction().toHex());
-      console.log("Signed Tx:", signedTx);
+      const txFinal = await marinaa.broadcastTransaction(finalTx.extractTransaction().toHex());
 
-      const txId = await marinaa.broadcastTransaction(signedTx);
-
-      console.log("result", txId);
-
-      // const txId = await api.sendRawTransaction(finalTx.extractTransaction().toHex());
-
-      // window.open("https://liquid.network/tr/testnet/tx/" + txId, "_blank");
+      window.open("https://liquid.network/tr/testnet/tx/" + txFinal.txid, "_blank");
     }
   };
 
