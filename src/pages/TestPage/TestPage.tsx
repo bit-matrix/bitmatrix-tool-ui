@@ -11,7 +11,7 @@ declare global {
 }
 
 const pool: Pool = {
-  id: "1",
+  id: "d55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb",
   quote: { ticker: "L-BTC", name: "Liquid bitcoin", asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49", value: "1000000000" },
   token: { ticker: "USDT", name: "USDT", asset: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958", value: "100000000" },
   lp: { ticker: "L-BTC", name: "Liquid bitcoin", asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49", value: "1000000000" },
@@ -89,7 +89,7 @@ export const TestPage = () => {
         console.log("slippage", output.amountWithSlipapge);
 
         const commitmentTxId = commitmentSign.case1(marinaa as unknown as Wallet, Number(inputAmount), output.amountWithSlipapge, pool, poolConfig, addressInfo.publicKey);
-        console.log(commitmentTxId);
+        console.log("commitmentTxId", commitmentTxId);
       }
     }
   };
