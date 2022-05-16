@@ -12,8 +12,8 @@ declare global {
 
 const pool: Pool = {
   id: "d55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb",
-  quote: { ticker: "L-BTC", name: "Liquid bitcoin", asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49", value: "1000000000" },
-  token: { ticker: "USDT", name: "USDT", asset: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958", value: "100000000" },
+  quote: { ticker: "L-BTC", name: "Liquid bitcoin", asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49", value: "10000000" },
+  token: { ticker: "USDT", name: "USDT", asset: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958", value: "1000000000" },
   lp: { ticker: "L-BTC", name: "Liquid bitcoin", asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49", value: "1000000000" },
   initialTx: { txid: "", block_hash: "", block_height: 0 },
   lastSyncedBlock: { block_hash: "", block_height: 0 },
@@ -27,8 +27,8 @@ const poolConfig: BmConfig = {
   id: "43a2f4ef8ce286e57ab3e39e6da3741382ba542854a1b28231a7a5b8ba337fcd",
   minRemainingSupply: 1000,
   minTokenValue: 50000000,
-  baseFee: { number: 650, hex: "" },
-  serviceFee: { number: 1200, hex: "" },
+  baseFee: { number: 100, hex: "" },
+  serviceFee: { number: 500, hex: "" },
   commitmentTxFee: { number: 100, hex: "0000000000000064" },
   defaultOrderingFee: { number: 1, hex: "01000000" },
   fundingOutputAddress: "tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg",
@@ -98,10 +98,16 @@ export const TestPage = () => {
     if (marinaa) {
       const addressInfo = await marinaa.getNextChangeAddress();
       if (addressInfo.publicKey) {
-        const output = convertion.convertForCtx(Number(inputAmount), 0.3, pool, poolConfig, CALL_METHOD.SWAP_TOKEN_FOR_QUOTE);
+        const output = convertion.convertForCtx(Number(inputAmount) * 100000000, 0.3, pool, poolConfig, CALL_METHOD.SWAP_TOKEN_FOR_QUOTE);
         console.log("slippage", output.amountWithSlipapge);
-
-        const commitmentTxId = commitmentSign.case1(marinaa as unknown as Wallet, Number(inputAmount), output.amountWithSlipapge, pool, poolConfig, addressInfo.publicKey);
+        const commitmentTxId = commitmentSign.case2(
+          marinaa as unknown as Wallet,
+          Number(inputAmount) * 100000000,
+          output.amountWithSlipapge,
+          pool,
+          poolConfig,
+          addressInfo.publicKey
+        );
         console.log("commitmentTxId", commitmentTxId);
       }
     }
@@ -114,7 +120,7 @@ export const TestPage = () => {
       <h6>Input Amount</h6>
       <Input type="text" value={inputAmount} onChange={(value: string) => setInputAmount(value.replace(/\s/g, ""))} />
 
-      <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={signTransactionCase2}>
+      <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={signTransactionCase1}>
         Sign
       </Button>
     </div>
