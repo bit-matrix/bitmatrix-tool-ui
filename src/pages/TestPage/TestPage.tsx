@@ -81,11 +81,24 @@ export const TestPage = () => {
     checkMarinaInstalled();
   }, []);
 
-  const signTransaction = async () => {
+  const signTransactionCase1 = async () => {
     if (marinaa) {
       const addressInfo = await marinaa.getNextChangeAddress();
       if (addressInfo.publicKey) {
         const output = convertion.convertForCtx(Number(inputAmount), 0.3, pool, poolConfig, CALL_METHOD.SWAP_QUOTE_FOR_TOKEN);
+        console.log("slippage", output.amountWithSlipapge);
+
+        const commitmentTxId = commitmentSign.case1(marinaa as unknown as Wallet, Number(inputAmount), output.amountWithSlipapge, pool, poolConfig, addressInfo.publicKey);
+        console.log("commitmentTxId", commitmentTxId);
+      }
+    }
+  };
+
+  const signTransactionCase2 = async () => {
+    if (marinaa) {
+      const addressInfo = await marinaa.getNextChangeAddress();
+      if (addressInfo.publicKey) {
+        const output = convertion.convertForCtx(Number(inputAmount), 0.3, pool, poolConfig, CALL_METHOD.SWAP_TOKEN_FOR_QUOTE);
         console.log("slippage", output.amountWithSlipapge);
 
         const commitmentTxId = commitmentSign.case1(marinaa as unknown as Wallet, Number(inputAmount), output.amountWithSlipapge, pool, poolConfig, addressInfo.publicKey);
@@ -101,7 +114,7 @@ export const TestPage = () => {
       <h6>Input Amount</h6>
       <Input type="text" value={inputAmount} onChange={(value: string) => setInputAmount(value.replace(/\s/g, ""))} />
 
-      <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={signTransaction}>
+      <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={signTransactionCase2}>
         Sign
       </Button>
     </div>
