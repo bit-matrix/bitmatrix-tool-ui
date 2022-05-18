@@ -76,6 +76,11 @@ export const LdkTool2 = () => {
 
       // 1. create an empty psbt object
       const pset = new Psbt({ network: networks.testnet });
+      // const x = new Uint8Array([1, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+      // console.log(confidential.isUnconfidentialValue(Buffer.from(x)));
+
+      // console.log(confidential.confidentialValueToSatoshi(Buffer.from(x)));
 
       // 2. add a custom OP_RETURN output to psbt
       pset.addOutput({
@@ -89,11 +94,27 @@ export const LdkTool2 = () => {
       const recipients = [
         {
           asset: networks.testnet.assetHash,
-          value: 5000,
+          value: 500000,
           //P2TR address
           address,
         },
+        // {
+        //   asset: networks.testnet.assetHash,
+        //   value: 1970,
+        //   //P2TR address
+        //   address,
+        // },
+        // {
+        //   asset: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
+        //   value: 190500000,
+        //   //P2TR address
+        //   address,
+        // },
       ];
+
+      // We need to be sure if the PSBT has other inputs added by someone else before marina does the funding
+      const marinaInputLastIndex = pset.data.inputs.length - 1;
+      const marinaOutputLastIndex = pset.data.outputs.length - 1;
 
       // 4. Serialize as base64 the psbt to be passed to LDK
       const tx = pset.toBase64();
@@ -110,33 +131,38 @@ export const LdkTool2 = () => {
 
       // deserialize and inspect the transaction
       const ptx = Psbt.fromBase64(unsignedTx);
-      //console.log(decoded.TX.toHex());
 
-      // here we sure we are adding only one input and assume the last is our.
-      // In case transaction has input user adds (not marina) be sure to track it down
-      const marinaInputIndex = ptx.data.inputs.length - 1;
-
-      // last output is always the fee output and the one before it, is the marina change output.
-      // keep in mind in case you manipulate transaction manually after calling craftMultipleRecipientsPset
-      const marinaChangeOutputIndex = ptx.data.outputs.length - 2;
-
-      // let's get bliding private first using the marina input script
-      const blindPrivKey = await getBlindingKeyByScript(ptx!.data!.inputs[marinaInputIndex]!.witnessUtxo!.script.toString("hex"));
+      // 6. Blind the marina change output (and unblind marina's input to do so)
 
       // create a map input index => blinding private key
       // we need this to unblind the utxo data
-      const inputBlindingMap = new Map<number, Buffer>().set(marinaInputIndex, Buffer.from(blindPrivKey, "hex"));
+      const inputBlindingMap = new Map<number, Buffer>();
+
+      const marinaInputs = marinaInputLastIndex === -1 ? ptx.data.inputs : ptx.data.inputs.slice(marinaInputLastIndex + 1);
+
+      marinaInputs.forEach(async (input, index) => {
+        const blindPrivateKey = await getBlindingKeyByScript(input!.witnessUtxo!.script.toString("hex"));
+        inputBlindingMap.set(index, Buffer.from(blindPrivateKey, "hex"));
+      });
 
       // create a map output index => blinding PUBLIC (!) key
       // this is needed to blind the marina change output
-      const outputBlindingMap = new Map<number, Buffer>().set(
-        marinaChangeOutputIndex,
-        // this is the blinding publick key of the change output for marina
-        liquidAddress.fromConfidential(changeAddress.confidentialAddress).blindingKey
-      );
+      const outputBlindingMap = new Map<number, Buffer>();
+
+      // we know the last output is the fee output and we need to slice the outputs before that and after the marina last index as well
+      const feeOutputIndex = ptx.data.outputs.length - 1;
+      const marinaOutputs = marinaOutputLastIndex === -1 ? ptx.data.outputs : ptx.data.outputs.slice(marinaOutputLastIndex + 1, feeOutputIndex - 1);
+      marinaOutputs.forEach((_, index) => {
+        outputBlindingMap.set(
+          index,
+          // this is the blinding publick key of the change output for marina
+          liquidAddress.fromConfidential(changeAddress.confidentialAddress).blindingKey
+        );
+      });
 
       await ptx.blindOutputsByIndex(Psbt.ECCKeysGenerator(ecc), inputBlindingMap, outputBlindingMap);
 
+      console.log("1");
       // 7. Sign the transaction's inputs with Marina
       const signedTx = await marinaa.signTransaction(ptx.toBase64());
 
