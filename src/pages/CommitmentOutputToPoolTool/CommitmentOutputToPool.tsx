@@ -161,7 +161,7 @@ export const CommitmentOutputToPoolTool = () => {
           )}
           <br />
           <Divider className="pool-generator-tool-divider" />
-          <h5>Change Outputs</h5>
+          <h5>Change Outputs Concat</h5>
           <Divider className="pool-generator-tool-divider" />
 
           {result.changeOutputFinal.map((changeOutput: any) => {
@@ -194,15 +194,15 @@ export const CommitmentOutputToPoolTool = () => {
           })}
           <br />
           <Divider className="pool-generator-tool-divider" />
-          <h5>Seperated Change Outputs</h5>
+          <h5>Final Change Outputs</h5>
           <Divider className="pool-generator-tool-divider" />
 
           {result.seperatedChangeOutputs.map((seperatedChangeOutput: any) => {
             return (
               <>
-                <h6>Seperated Change Output {seperatedChangeOutput.index}</h6>
+                <h6>Final Change Output {seperatedChangeOutput.index}</h6>
 
-                <h6>Seperated Change Asset </h6>
+                <h6>Change Asset </h6>
                 <InputGroup>
                   <Input value={seperatedChangeOutput.asset} disabled />
                   <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
@@ -212,7 +212,7 @@ export const CommitmentOutputToPoolTool = () => {
                   </Whisper>
                 </InputGroup>
 
-                <h6>Seperated Change Amount </h6>
+                <h6>Change Amount </h6>
                 <InputGroup>
                   <Input value={seperatedChangeOutput.amount} disabled />
                   <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
@@ -222,7 +222,7 @@ export const CommitmentOutputToPoolTool = () => {
                   </Whisper>
                 </InputGroup>
 
-                <h6>Seperated Change Nonce </h6>
+                <h6>Change Nonce </h6>
                 <InputGroup>
                   <Input value={seperatedChangeOutput.nonce} disabled />
                   <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
@@ -232,7 +232,7 @@ export const CommitmentOutputToPoolTool = () => {
                   </Whisper>
                 </InputGroup>
 
-                <h6>Seperated Change Script Pub Key </h6>
+                <h6>Change Script Pub Key </h6>
                 <InputGroup>
                   <Input value={seperatedChangeOutput.scriptpubkey} disabled />
                   <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
