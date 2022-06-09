@@ -6,10 +6,10 @@ import { commitmentTxOutputsFragmentation } from "./helper";
 export const CommitmentOutputToPoolTool = () => {
   const [transactionId, setTransactionId] = useState<string>("");
   const [result, setResult] = useState<any>();
-  const [loaded, setLoaded] = useState<boolean | undefined>(undefined);
+  const [load, setLoad] = useState<boolean>(false);
 
   const createCommitmentOutput = async () => {
-    setLoaded(true);
+    setLoad(true);
 
     const cof = await commitmentTxOutputsFragmentation(transactionId);
 
@@ -29,7 +29,7 @@ export const CommitmentOutputToPoolTool = () => {
       seperatedChangeOutputs: cof.seperatedChangeOutputs,
     });
 
-    setLoaded(false);
+    setLoad(false);
   };
 
   return (
@@ -39,7 +39,7 @@ export const CommitmentOutputToPoolTool = () => {
       <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={createCommitmentOutput}>
         Create Commitment Output To Pool
       </Button>
-      {loaded && <Loader size="md" center />}
+      {load && <Loader size="md" center />}
       {result && (
         <>
           <Divider className="pool-generator-tool-divider" />
