@@ -97,10 +97,6 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
 
   let output2PairValue = "00";
 
-  console.log(cmtOutput2.asset);
-  console.log("pair2Asset", pair2Asset);
-  console.log("pair1Asset", pair1Asset);
-
   if (cmtOutput2.asset === pair2Asset) output2PairValue = "01";
   if (cmtOutput2.asset === pair1Asset) output2PairValue = "03";
 
@@ -110,19 +106,14 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
   const cmtOutput2Value = convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutput2.value).mul(100000000).toNumber())).hex;
 
   //   9. Commitment out 3 ’ün taşıdığı asset id si pair1_asset türünden ise 0x03, pair2_asset türünden ise 0x01. (bu sadece case 3’ de var, eğer başka bir case ise empty 0x)
-  let cmtOutput3PairValue = "00";
+  //   10. Commitment out 3 ’in taşıdığı asset değeri
 
+  let cmtOutput3PairValue = "00";
+  let cmtOutput3Value;
+  let cmtOutput3Asset;
   if (methodCall === "03" && cmtOutput3) {
     if (cmtOutput3.asset === pair2Asset) cmtOutput3PairValue = "01";
     if (cmtOutput3.asset === pair1Asset) cmtOutput3PairValue = "03";
-  }
-
-  //   10. Commitment out 3 ’in taşıdığı asset değeri
-
-  let cmtOutput3Value;
-  let cmtOutput3Asset;
-
-  if (cmtOutput3) {
     cmtOutput3Value = convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutput3.value).mul(100000000).toNumber())).hex;
     cmtOutput3Asset = cmtOutput3.asset;
   }
@@ -140,8 +131,6 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
 
     return { index: index + 1, asset: co.assetcommitment, amount: co.valuecommitment, nonce: co.commitmentnonce, scriptpubkey: co.scriptPubKey.hex };
   });
-
-  console.log(seperatedChangeOutputs);
 
   const changeOutputFinal = seperatedChangeOutputs.map((cof) => {
     return {
