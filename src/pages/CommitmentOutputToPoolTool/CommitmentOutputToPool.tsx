@@ -12,8 +12,11 @@ export const CommitmentOutputToPoolTool = () => {
     setLoad(true);
 
     const cof = await commitmentTxOutputsFragmentation(transactionId);
-
     setResult({
+      inputs: cof.inputs,
+      inputCount: cof.inputCount.number,
+      outputCount: cof.outputCount.number,
+      cmtTxInOutpoints: cof.cmtTxInOutpoints,
       poolId: cof.poolId,
       methodCall: cof.methodCall,
       publicKey: cof.publicKey,
@@ -43,6 +46,34 @@ export const CommitmentOutputToPoolTool = () => {
       {result && (
         <>
           <Divider className="pool-generator-tool-divider" />
+          <div>
+            <h5>Input Count</h5>
+            <h6>{result.inputCount}</h6>
+
+            <h5>Output Count</h5>
+            <h6>{result.outputCount}</h6>
+          </div>
+
+          <Divider />
+
+          <h5>Commitment Tx Inputs Outpoints</h5>
+          {result.cmtTxInOutpoints.map((cmtTxInOutpoint: any) => {
+            return (
+              <>
+                <InputGroup>
+                  <Input value={cmtTxInOutpoint} disabled />
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(cmtTxInOutpoint || "")}>
+                      <CopyIcon width="1rem" height="1rem" />
+                    </InputGroup.Button>
+                  </Whisper>
+                </InputGroup>
+                <br />
+              </>
+            );
+          })}
+
+          <Divider />
 
           <h5>Call Data</h5>
           <h6>Pool Id</h6>
@@ -169,12 +200,12 @@ export const CommitmentOutputToPoolTool = () => {
               <>
                 <h6>Change Output {changeOutput.index}</h6>
 
-                <h6> Change Output Asset + Asset </h6>
+                <h6> Change Output Asset + Value </h6>
 
                 <InputGroup>
-                  <Input value={changeOutput.asset} disabled />
+                  <Input value={changeOutput.assetValue} disabled />
                   <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
-                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(changeOutput.asset || "")}>
+                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(changeOutput.assetValue || "")}>
                       <CopyIcon width="1rem" height="1rem" />
                     </InputGroup.Button>
                   </Whisper>
