@@ -123,24 +123,36 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
       return {
         index: index + 1,
         asset: "01" + hexLE(co.asset),
+        value: convertion.numToLE64(WizData.fromNumber(new Decimal(co.value).mul(100000000).toNumber())).hex,
         amount: "01" + convertion.numToLE64(WizData.fromNumber(new Decimal(co.value).mul(100000000).toNumber())).hex,
         nonce: "00",
         scriptpubkey: WizData.fromNumber(co.scriptPubKey.hex.length / 2).hex + co.scriptPubKey.hex,
       };
     }
 
-    return { index: index + 1, asset: co.assetcommitment, amount: co.valuecommitment, nonce: co.commitmentnonce, scriptpubkey: co.scriptPubKey.hex };
+    return {
+      index: index + 1,
+      asset: co.assetcommitment,
+      value: co.valuecommitment,
+      amount: co.valuecommitment,
+      nonce: co.commitmentnonce,
+      scriptpubkey: WizData.fromNumber(co.scriptPubKey.hex.length / 2).hex + co.scriptPubKey.hex,
+    };
   });
 
   const changeOutputFinal = seperatedChangeOutputs.map((cof) => {
     return {
       index: cof.index,
-      asset: cof.asset + cof.asset,
+      assetValue: cof.asset + cof.value,
       noncScpkey: cof.nonce + cof.scriptpubkey,
     };
   });
 
   return {
+    outputCount,
+    inputCount,
+    inputs,
+    cmtTxInOutpoints,
     cmtOutput1Value,
     output2PairValue,
     cmtOutput2Value,
