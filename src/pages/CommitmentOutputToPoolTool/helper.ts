@@ -88,7 +88,7 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
   const cmtOutput1Value = convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutput1.value).mul(100000000).toNumber())).hex;
 
   //   7. Commitment out 2 (Cmt out 1 hemen sonraki output)’nin taşıdığı asset idsi pair1_asset türünden ise 0x03, pair2_asset türünden ise 0x01.
-  const poolReq = await axios.get(`https://rocksdb.basebitmatrix.com/pools/${poolId}`);
+  const poolReq = await axios.get(`https://rocksdb.basebitmatrix.com/pools/d55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb`);
   const poolDetail: Pool = poolReq.data;
 
   const pair1Asset = poolDetail.quote.asset;
