@@ -1,4 +1,4 @@
-import { api } from "@bitmatrix/lib";
+import { api, commitmentOutput } from "@bitmatrix/lib";
 import { TxDetailRPC } from "./models/TxDetailRPC";
 import { TxVOutRPC } from "./models/TxVOutRPC";
 import WizData, { hexLE } from "@script-wiz/wiz-data";
@@ -28,6 +28,9 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
   if (inputs.length > 12) Promise.reject("Input length must be smaller than 12");
   const inputCount = WizData.fromNumber(inputs.length);
 
+  //cmt txin locktime’ı 4_bytes return
+  const cmtTxLocktimeByteLength = convertion.numToLE32(WizData.fromNumber(decodedTransaction.locktime)).hex;
+
   const cmtTxInOutpoints = inputs.map((inp) => {
     const vout32Byte = convertion.numToLE32(WizData.fromNumber(inp.vout));
     return inp.txid + vout32Byte.hex;
@@ -51,7 +54,6 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
   const methodCall = opReturnOutputScriptHex.substring(64, 66);
 
   // public key (66)
-  // invalid dedi
   const publicKey = opReturnOutputScriptHex.substring(66, 132);
 
   // slippageTolerance / amount (16)
@@ -118,6 +120,11 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
     cmtOutput3Asset = cmtOutput3.asset;
   }
 
+  //cmt tx’in fee miktarı 8_bytes olacak
+  const outputsLength: number = outputCount.number!;
+  const cmtOutputFeeValue: number = outputs[outputsLength - 1].value || 0;
+  const cmtOutputFeeHexValue = convertion.convert64(WizData.fromNumber(cmtOutputFeeValue)).hex;
+
   const seperatedChangeOutputs = changeOutputs.map((co, index) => {
     if (co.asset) {
       return {
@@ -148,7 +155,16 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
     };
   });
 
+  let isAddLiquidity: boolean = false;
+  let commitmentOutputResult: any = undefined;
+
+  commitmentOutputResult = commitmentOutput.commitmentOutputTapscript(poolId, publicKey, isAddLiquidity);
+  const tapTweakedResult = commitmentOutputResult.taprootResult.tweak.hex;
+  const tapTweakedResultPrefix = tapTweakedResult.substring(0, 2);
+
   return {
+    tapTweakedResultPrefix,
+    cmtTxLocktimeByteLength,
     outputCount,
     inputCount,
     inputs,
@@ -157,6 +173,7 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
     output2PairValue,
     cmtOutput2Value,
     cmtOutput3Value,
+    cmtOutputFeeHexValue,
     cmtOutput3PairValue,
     cmtOutput3Asset,
     changeOutputFinal,
