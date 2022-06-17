@@ -33,13 +33,15 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
 
   const cmtTxInOutpoints = inputs.map((inp) => {
     const vout32Byte = convertion.numToLE32(WizData.fromNumber(inp.vout));
-    return inp.txid + vout32Byte.hex;
+    return hexLE(inp.txid) + vout32Byte.hex;
   });
 
   const nSequences = inputs.map((inp) => inp.sequence);
 
   //Every nsequence must equal
   if (nSequences.every((ns) => ns !== nSequences[0])) Promise.reject("Every nSequence must equal");
+
+  const nsequenceValue = nSequences[0].toString(16);
 
   const opReturnOutput = outputs[0].scriptPubKey.asm.split(" ");
 
@@ -87,7 +89,8 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
 
   // 6. Commitment out 1 (Calldatadan hemen sonraki output)’in taşıdığı L-BTC değeri 8 byte LE olarak.
   if (cmtOutput1.asset !== lbtcAssest) Promise.reject("Asset must be L-BTC");
-  const cmtOutput1Value = convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutput1.value).mul(100000000).toNumber())).hex;
+
+  const cmtOutput1Value = "01" + hexLE(convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutput1.value).mul(100000000).toNumber())).hex);
 
   //   7. Commitment out 2 (Cmt out 1 hemen sonraki output)’nin taşıdığı asset idsi pair1_asset türünden ise 0x03, pair2_asset türünden ise 0x01.
   const poolReq = await axios.get(`https://rocksdb.basebitmatrix.com/pools/d55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb`);
@@ -105,7 +108,7 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
   //   8. Commitment out 2 ’in taşıdığı asset değeri 8 byte LE olarak.
 
   if (cmtOutput2.value === undefined) Promise.reject("Commitment Output Value musn't be confidential.");
-  const cmtOutput2Value = convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutput2.value).mul(100000000).toNumber())).hex;
+  const cmtOutput2Value = "01" + hexLE(convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutput2.value).mul(100000000).toNumber())).hex);
 
   //   9. Commitment out 3 ’ün taşıdığı asset id si pair1_asset türünden ise 0x03, pair2_asset türünden ise 0x01. (bu sadece case 3’ de var, eğer başka bir case ise empty 0x)
   //   10. Commitment out 3 ’in taşıdığı asset değeri
@@ -116,14 +119,15 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
   if (methodCall === "03" && cmtOutput3) {
     if (cmtOutput3.asset === pair2Asset) cmtOutput3PairValue = "01";
     if (cmtOutput3.asset === pair1Asset) cmtOutput3PairValue = "03";
-    cmtOutput3Value = convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutput3.value).mul(100000000).toNumber())).hex;
+    cmtOutput3Value = "01" + hexLE(convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutput3.value).mul(100000000).toNumber())).hex);
     cmtOutput3Asset = cmtOutput3.asset;
   }
 
   //cmt tx’in fee miktarı 8_bytes olacak
   const outputsLength: number = outputCount.number!;
   const cmtOutputFeeValue: number = outputs[outputsLength - 1].value || 0;
-  const cmtOutputFeeHexValue = convertion.convert64(WizData.fromNumber(cmtOutputFeeValue)).hex;
+
+  const cmtOutputFeeHexValue = convertion.convert64(WizData.fromNumber(new Decimal(cmtOutputFeeValue).mul(100000000).toNumber())).hex;
 
   const seperatedChangeOutputs = changeOutputs.map((co, index) => {
     if (co.asset) {
@@ -168,6 +172,7 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
     outputCount,
     inputCount,
     inputs,
+    nsequenceValue,
     cmtTxInOutpoints,
     cmtOutput1Value,
     output2PairValue,
