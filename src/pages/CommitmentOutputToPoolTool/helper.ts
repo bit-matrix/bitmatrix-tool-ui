@@ -127,7 +127,7 @@ export const commitmentTxOutputsFragmentation = async (testTxId: string) => {
   const outputsLength: number = outputCount.number!;
   const cmtOutputFeeValue: number = outputs[outputsLength - 1].value || 0;
 
-  const cmtOutputFeeHexValue = convertion.convert64(WizData.fromNumber(new Decimal(cmtOutputFeeValue).mul(100000000).toNumber())).hex;
+  const cmtOutputFeeHexValue = "01" + hexLE(convertion.numToLE64(WizData.fromNumber(new Decimal(cmtOutputFeeValue).mul(100000000).toNumber())).hex);
 
   const seperatedChangeOutputs = changeOutputs.map((co, index) => {
     if (co.asset) {

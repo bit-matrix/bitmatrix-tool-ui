@@ -63,7 +63,7 @@ export const CommitmentOutputToPoolTool = () => {
             <h5>Tweaked Key Prefix</h5>
             <h6>{result.tapTweakedResultPrefix}</h6>
 
-            <h5>Commitment Output Fee Value</h5>
+            <h5>TransactionFee Value</h5>
             <h6>{result.cmtOutputFeeHexValue}</h6>
 
             <h5>nSequence</h5>
