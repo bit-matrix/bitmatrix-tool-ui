@@ -68,11 +68,22 @@ export const poolTransaction = async () => {
 
       //pool detail rocks db den geldiği için asset, yeni pool modelde assetHash olacak
       const pair_1_asset_id = poolData.quote.asset;
+      const pair_2_asset_id = poolData.token.asset;
 
       if (commitmentOutput2AssetId !== pair_1_asset_id) console.log("commitmentOutput2AssetId must be equal to pair_1_asset_id");
 
       //   4-Commitment output 2 miktarına user_supply_total ismini ver.
       const user_supply_total = commitmentOutput2.value;
+
+      if (user_supply_total > pool_pair_1_liquidity) {
+        Promise.reject("Supply overflow");
+        return {
+          assetId: pair_1_asset_id,
+          value: user_supply_total,
+          new_pair_1_pool_liquidity: pool_pair_1_liquidity,
+          new_pair_2_pool_liquidity: pool_pair_2_liquidity,
+        };
+      }
 
       //5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
       const user_supply_lp_fees = Math.floor(user_supply_total / 500);
@@ -114,6 +125,27 @@ export const poolTransaction = async () => {
 
       // 16-user_received_pair_2_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_2 ismini ver.
       const user_received_pair_2 = Math.floor(user_received_pair_2_apx - payout_additional_fees);
+
+      if (user_received_pair_2 < Math.floor(22 * pair_2_coefficient)) {
+        Promise.reject("Dust payout");
+        return {
+          assetId: pair_1_asset_id,
+          value: user_supply_total,
+          new_pair_1_pool_liquidity: pool_pair_1_liquidity,
+          new_pair_2_pool_liquidity: pool_pair_2_liquidity,
+        };
+      }
+
+      if (user_received_pair_2 < Number(cof.slippageTolerance)) {
+        Promise.reject("Out of slippage");
+        return {
+          assetId: pair_1_asset_id,
+          value: user_supply_total,
+          new_pair_1_pool_liquidity: pool_pair_1_liquidity,
+          new_pair_2_pool_liquidity: pool_pair_2_liquidity,
+        };
+      }
+
       return {
         method,
         pool_pair_1_liquidity,
