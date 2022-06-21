@@ -146,6 +146,19 @@ export const poolTransaction = async () => {
         };
       }
 
+      //SUCCESS
+      // İlgili slot için 1 tane settlement output oluştur. Bu outputun asset ID ‘sini pair_2_asset id si olarak ayarla, miktarını da user_received_pair_2 olarak ayarla.
+      const output = {
+        assetId: pair_2_asset_id,
+        value: user_received_pair_2,
+      };
+
+      // pool_pair_1_liquidity değerine user_supply_total değerine ekle ve sonuca new_pool_pair_1_liquidity ismini ver. Bu değeri havuzun güncel pair 1 liquidity miktarı olarak ata.
+      const new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + user_supply_total);
+
+      // pool_pair_2_liquidity değerinden user_received_pair_2 değerini çıkar ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
+      const new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - user_received_pair_2);
+
       return {
         method,
         pool_pair_1_liquidity,
@@ -167,6 +180,9 @@ export const poolTransaction = async () => {
         user_received_pair_2_apx,
         payout_additional_fees,
         user_received_pair_2,
+        output,
+        new_pool_pair_1_liquidity,
+        new_pool_pair_2_liquidity,
       };
     default:
       return {};
