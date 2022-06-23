@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Divider, Input, InputGroup, Loader, Tooltip, Whisper } from "rsuite";
 import CopyIcon from "../../components/Svg/Icons/Copy";
 import { commitmentTxOutputsFragmentation } from "./helper";
@@ -7,6 +8,8 @@ export const CommitmentOutputToPoolTool = () => {
   const [transactionId, setTransactionId] = useState<string>("");
   const [result, setResult] = useState<any>();
   const [load, setLoad] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const createCommitmentOutput = async () => {
     setLoad(true);
@@ -49,6 +52,11 @@ export const CommitmentOutputToPoolTool = () => {
       {load && <Loader size="md" center />}
       {result && (
         <>
+          <br />
+          <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={() => navigate("/pooltransaction")}>
+            Go To Pool Transaction Page
+          </Button>
+
           <Divider className="pool-generator-tool-divider" />
           <div>
             <h5>Input Count</h5>

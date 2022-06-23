@@ -5,6 +5,7 @@
   "dependencies": {
     "@bitmatrix/esplora-api-client": "^0.0.8",
     "@bitmatrix/lib": "^0.0.43",
+    "@script-wiz/lib-core": "^0.0.46",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -18,7 +19,7 @@
     "marina-provider": "^1.5.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.3",
     "rsuite": "^5.8.0",
     "sass": "^1.49.7",
