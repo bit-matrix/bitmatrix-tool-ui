@@ -1,7 +1,6 @@
 import axios from "axios";
 import { commitmentTxOutputsFragmentation } from "../CommitmentOutputToPoolTool/helper";
 
-const transactionId = "7bce9fc29bcec7eb43716e18c1385da6bdc200d31b7a1c1b263d54bfb0fe1315";
 const poolData = {
   id: "d3ffddaf4e61517bd0a538507d4164a8881edfd38329e0112338fd1894c2c0d1",
   quote: {
@@ -42,7 +41,7 @@ const poolData = {
   active: true,
 };
 
-export const poolTransaction = async () => {
+export const poolTransaction = async (transactionId: string) => {
   const cof = await commitmentTxOutputsFragmentation(transactionId);
   const method = cof.methodCall;
   //const poolId = cof.poolId;
@@ -52,17 +51,16 @@ export const poolTransaction = async () => {
   //const poolData = poolReq.data;
   switch (method) {
     case "01":
-      //   1-Havuzun güncel pair_1 liquidity miktarına pool_pair_1_liquidity ismini ver.
+      // 1-Havuzun güncel pair_1 liquidity miktarına pool_pair_1_liquidity ismini ver.
       const pool_pair_1_liquidity = Number(poolData.quote.value);
 
-      //   2-Havuzun güncel pair_2 liquidity miktarına pool_pair_2_liquidity ismini ver.
-
+      // 2-Havuzun güncel pair_2 liquidity miktarına pool_pair_2_liquidity ismini ver.
       const pool_pair_2_liquidity = Number(poolData.token.value);
 
       // transaction outputs
       const commitmentOutputs = cof.outputs;
 
-      //   3-Commitment output 2 asset ID’sinin pair_1_asset_id olduğunu kontrol et.
+      //3-Commitment output 2 asset ID’sinin pair_1_asset_id olduğunu kontrol et.
       const commitmentOutput2 = commitmentOutputs[2];
       const commitmentOutput2AssetId = commitmentOutput2.asset;
 
@@ -105,7 +103,6 @@ export const poolTransaction = async () => {
       const pool_pair_1_liquidity_downgraded = Math.floor(pool_pair_1_liquidity / pair_1_coefficient);
 
       // 10-pool_pair_2_liquidity değerini pair_2_coefficient’a böl ve sonuca pool_pair_2_liquidity_downgraded ismini ver
-
       const pool_pair_2_liquidity_downgraded = Math.floor(pool_pair_2_liquidity / pair_2_coefficient);
 
       // 11-pool_pair_1_liquidity_downgraded ile pool_pair_2_liquidity_downgraded ‘I çarp ve sonuca pool_constant ismini ver.
@@ -125,6 +122,29 @@ export const poolTransaction = async () => {
 
       // 16-user_received_pair_2_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_2 ismini ver.
       const user_received_pair_2 = Math.floor(user_received_pair_2_apx - payout_additional_fees);
+
+      console.log({
+        method,
+        pool_pair_1_liquidity,
+        pool_pair_2_liquidity,
+        commitmentOutput2AssetId,
+        pair_1_asset_id,
+        user_supply_total,
+        user_supply_lp_fees,
+        user_supply_available,
+        constant_coefficient,
+        pair_1_coefficient,
+        pair_2_coefficient,
+        constant_coefficient_downgraded,
+        pool_pair_1_liquidity_downgraded,
+        pool_pair_2_liquidity_downgraded,
+        pool_constant,
+        new_pair_2_pool_liquidity_apx_1,
+        new_pair_2_pool_liquidity_apx_2,
+        user_received_pair_2_apx,
+        payout_additional_fees,
+        user_received_pair_2,
+      });
 
       if (user_received_pair_2 < Math.floor(22 * pair_2_coefficient)) {
         Promise.reject("Dust payout");
