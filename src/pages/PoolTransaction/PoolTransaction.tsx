@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Divider, Input, InputGroup, Loader, Tooltip, Whisper } from "rsuite";
 import CopyIcon from "../../components/Svg/Icons/Copy";
 import { poolTransaction } from "./helper";
@@ -8,10 +9,12 @@ export const PoolTransaction = () => {
   const [result, setResult] = useState<any>();
   const [load, setLoad] = useState<boolean>(false);
 
+  const navigate = useNavigate();
+
   const createCommitmentOutput = async () => {
     setLoad(true);
 
-    const cof = await poolTransaction();
+    const cof = await poolTransaction(transactionId);
     setResult({
       pool_pair_1_liquidity: cof.pool_pair_1_liquidity,
       pool_pair_2_liquidity: cof.pool_pair_2_liquidity,
@@ -42,12 +45,16 @@ export const PoolTransaction = () => {
       <h6>Transaction Id</h6>
       <Input type="string" value={transactionId} onChange={(value: string) => setTransactionId(value)} />
       <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={createCommitmentOutput}>
-        Create Commitment Output To Pool
+        Calculate Transaction
       </Button>
 
       {load && <Loader size="md" center />}
       {result && (
         <>
+          <br />
+          <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={() => navigate("/commitmentoutputtopool")}>
+            Go To Commitment Output Page
+          </Button>
           <Divider className="pool-generator-tool-divider" />
 
           <h5>Pool Pair 1 Liquidity</h5>
