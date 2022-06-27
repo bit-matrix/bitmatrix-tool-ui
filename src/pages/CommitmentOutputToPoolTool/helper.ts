@@ -4,8 +4,6 @@ import { TxVOutRPC } from "./models/TxVOutRPC";
 import WizData, { hexLE } from "@script-wiz/wiz-data";
 import { TxVInRPC } from "./models/TxVınRPC";
 import { convertion } from "@script-wiz/lib-core";
-import axios from "axios";
-import { Pool } from "@bitmatrix/models";
 import Decimal from "decimal.js";
 
 const lbtcAssest = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
@@ -126,7 +124,7 @@ export const commitmentTxOutputsFragmentation = async (txId: string) => {
   const cmtOutput1Value = "01" + convertion.numToLE64LE(WizData.fromNumber(new Decimal(cmtOutput1.value).mul(100000000).toNumber())).hex;
 
   //   7. Commitment out 2 (Cmt out 1 hemen sonraki output)’nin taşıdığı asset idsi pair1_asset türünden ise 0x03, pair2_asset türünden ise 0x01.
-  const poolReq = await axios.get(`https://rocksdb.basebitmatrix.com/pools/${poolId}`);
+  //const poolReq = await axios.get(`https://rocksdb.basebitmatrix.com/pools/${poolId}`);
   //const poolDetail: Pool = poolReq.data;
 
   const pair1Asset = poolDetail.quote.asset;
