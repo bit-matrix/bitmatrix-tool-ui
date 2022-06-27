@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Divider, Input, InputGroup, Loader, Tooltip, Whisper } from "rsuite";
 import CopyIcon from "../../components/Svg/Icons/Copy";
 import { poolTransaction } from "./helper";
+import "./poolTransaction.css";
 
 export const PoolTransaction = () => {
   const [transactionId, setTransactionId] = useState<string>("");
@@ -16,6 +17,7 @@ export const PoolTransaction = () => {
 
     const cof = await poolTransaction(transactionId);
     setResult({
+      errorMessages: cof.errorMessages,
       pool_pair_1_liquidity: cof.pool_pair_1_liquidity,
       pool_pair_2_liquidity: cof.pool_pair_2_liquidity,
       commitmentOutput2AssetId: cof.commitmentOutput2AssetId,
@@ -56,7 +58,11 @@ export const PoolTransaction = () => {
             Go To Commitment Output Page
           </Button>
           <Divider className="pool-generator-tool-divider" />
-
+          {result.errorMessages !== [] &&
+            result.errorMessages.map((message: string) => {
+              return <h5 className="redText">{message}</h5>;
+            })}
+          <Divider />
           <h5>Pool Pair 1 Liquidity</h5>
           <InputGroup>
             <Input value={result.pool_pair_1_liquidity} disabled />
@@ -66,9 +72,7 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <Divider />
-
           <h6>Pool Pair 2 Liquidity</h6>
           <InputGroup>
             <Input value={result.pool_pair_2_liquidity} disabled />
@@ -78,7 +82,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>Commitment Output2 AssetId</h6>
           <InputGroup>
             <Input value={result.commitmentOutput2AssetId} disabled />
@@ -88,7 +91,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>Pair 1 Asset Id</h6>
           <InputGroup>
             <Input value={result.pair_1_asset_id} disabled />
@@ -98,7 +100,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>User Supply Total</h6>
           <InputGroup>
             <Input value={result.user_supply_total} disabled />
@@ -108,7 +109,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>User Supply Lp Fees</h6>
           <InputGroup>
             <Input value={result.user_supply_lp_fees} disabled />
@@ -118,9 +118,7 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <Divider className="pool-generator-tool-divider" />
-
           <h6>User Supply Available</h6>
           <InputGroup>
             <Input value={result.user_supply_available} disabled />
@@ -130,7 +128,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>Constant Coefficient</h6>
           <InputGroup>
             <Input value={result.constant_coefficient} disabled />
@@ -140,7 +137,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>Pair 1 Coefficient</h6>
           <InputGroup>
             <Input value={result.pair_1_coefficient} disabled />
@@ -150,7 +146,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>Pair 2 Coefficient</h6>
           <InputGroup>
             <Input value={result.pair_2_coefficient} disabled />
@@ -160,7 +155,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>Constant Coefficient Downgraded</h6>
           <InputGroup>
             <Input value={result.constant_coefficient_downgraded} disabled />
@@ -170,7 +164,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>Pool Pair 1 liquidity Downgraded</h6>
           <InputGroup>
             <Input value={result.pool_pair_1_liquidity_downgraded} disabled />
@@ -180,11 +173,8 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <Divider className="pool-generator-tool-divider" />
-
           <h6>Pool Pair 2 Liquidity Downgraded </h6>
-
           <InputGroup>
             <Input value={result.pool_pair_2_liquidity_downgraded} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
@@ -193,9 +183,7 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6> pool constant</h6>
-
           <InputGroup>
             <Input value={result.pool_constant} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
@@ -204,7 +192,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>New pair 2 pool liquidity apx 1</h6>
           <InputGroup>
             <Input value={result.new_pair_2_pool_liquidity_apx_1} disabled />
@@ -214,7 +201,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>new pair 2 pool liquidity apx 2 </h6>
           <InputGroup>
             <Input value={result.new_pair_2_pool_liquidity_apx_2} disabled />
@@ -224,7 +210,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>user received pair 2 apx</h6>
           <InputGroup>
             <Input value={result.user_received_pair_2_apx} disabled />
@@ -234,7 +219,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>payout additional fees</h6>
           <InputGroup>
             <Input value={result.payout_additional_fees} disabled />
@@ -244,7 +228,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-
           <h6>user received pair 2</h6>
           <InputGroup>
             <Input value={result.user_received_pair_2} disabled />
