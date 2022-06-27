@@ -1,5 +1,7 @@
-import axios from "axios";
 import { commitmentTxOutputsFragmentation } from "../CommitmentOutputToPoolTool/helper";
+import Decimal from "decimal.js";
+import { convertion } from "@script-wiz/lib-core";
+import WizData from "@script-wiz/wiz-data";
 
 const poolData = {
   id: "d3ffddaf4e61517bd0a538507d4164a8881edfd38329e0112338fd1894c2c0d1",
@@ -43,6 +45,13 @@ const poolData = {
 
 export const poolTransaction = async (transactionId: string) => {
   const cof = await commitmentTxOutputsFragmentation(transactionId);
+  let errorMessages = [];
+  let output = {
+    assetId: "",
+    value: 0,
+  };
+  let new_pool_pair_1_liquidity = undefined;
+  let new_pool_pair_2_liquidity = undefined;
   const method = cof.methodCall;
   //const poolId = cof.poolId;
 
@@ -68,19 +77,18 @@ export const poolTransaction = async (transactionId: string) => {
       const pair_1_asset_id = poolData.quote.asset;
       const pair_2_asset_id = poolData.token.asset;
 
-      if (commitmentOutput2AssetId !== pair_1_asset_id) console.log("commitmentOutput2AssetId must be equal to pair_1_asset_id");
+      if (commitmentOutput2AssetId !== pair_1_asset_id) errorMessages.push("commitmentOutput2AssetId must be equal to pair_1_asset_id");
 
       //   4-Commitment output 2 miktarına user_supply_total ismini ver.
-      const user_supply_total = commitmentOutput2.value;
+      const user_supply_total = new Decimal(commitmentOutput2.value).mul(100000000).toNumber();
 
       if (user_supply_total > pool_pair_1_liquidity) {
-        Promise.reject("Supply overflow");
-        return {
-          assetId: pair_1_asset_id,
-          value: user_supply_total,
-          new_pair_1_pool_liquidity: pool_pair_1_liquidity,
-          new_pair_2_pool_liquidity: pool_pair_2_liquidity,
-        };
+        errorMessages.push("Supply overflow");
+
+        output.assetId = pair_1_asset_id;
+        output.value = user_supply_total;
+        new_pool_pair_1_liquidity = pool_pair_1_liquidity;
+        new_pool_pair_2_liquidity = pool_pair_2_liquidity;
       }
 
       //5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
@@ -123,63 +131,41 @@ export const poolTransaction = async (transactionId: string) => {
       // 16-user_received_pair_2_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_2 ismini ver.
       const user_received_pair_2 = Math.floor(user_received_pair_2_apx - payout_additional_fees);
 
-      console.log({
-        method,
-        pool_pair_1_liquidity,
-        pool_pair_2_liquidity,
-        commitmentOutput2AssetId,
-        pair_1_asset_id,
-        user_supply_total,
-        user_supply_lp_fees,
-        user_supply_available,
-        constant_coefficient,
-        pair_1_coefficient,
-        pair_2_coefficient,
-        constant_coefficient_downgraded,
-        pool_pair_1_liquidity_downgraded,
-        pool_pair_2_liquidity_downgraded,
-        pool_constant,
-        new_pair_2_pool_liquidity_apx_1,
-        new_pair_2_pool_liquidity_apx_2,
-        user_received_pair_2_apx,
-        payout_additional_fees,
-        user_received_pair_2,
-      });
-
       if (user_received_pair_2 < Math.floor(22 * pair_2_coefficient)) {
-        Promise.reject("Dust payout");
-        return {
-          assetId: pair_1_asset_id,
-          value: user_supply_total,
-          new_pair_1_pool_liquidity: pool_pair_1_liquidity,
-          new_pair_2_pool_liquidity: pool_pair_2_liquidity,
-        };
+        errorMessages.push("Dust payout");
+
+        output.assetId = pair_1_asset_id;
+        output.value = user_supply_total;
+        new_pool_pair_1_liquidity = pool_pair_1_liquidity;
+        new_pool_pair_2_liquidity = pool_pair_2_liquidity;
       }
 
-      if (user_received_pair_2 < Number(cof.slippageTolerance)) {
-        Promise.reject("Out of slippage");
-        return {
-          assetId: pair_1_asset_id,
-          value: user_supply_total,
-          new_pair_1_pool_liquidity: pool_pair_1_liquidity,
-          new_pair_2_pool_liquidity: pool_pair_2_liquidity,
-        };
+      if (user_received_pair_2 < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
+        errorMessages.push("Out of slippage");
+
+        output.assetId = pair_1_asset_id;
+        output.value = user_supply_total;
+        new_pool_pair_1_liquidity = pool_pair_1_liquidity;
+        new_pool_pair_2_liquidity = pool_pair_2_liquidity;
       }
 
-      //SUCCESS
-      // İlgili slot için 1 tane settlement output oluştur. Bu outputun asset ID ‘sini pair_2_asset id si olarak ayarla, miktarını da user_received_pair_2 olarak ayarla.
-      const output = {
-        assetId: pair_2_asset_id,
-        value: user_received_pair_2,
-      };
+      if (errorMessages.length === 0) {
+        //SUCCESS
+        // İlgili slot için 1 tane settlement output oluştur. Bu outputun asset ID ‘sini pair_2_asset id si olarak ayarla, miktarını da user_received_pair_2 olarak ayarla.
+        output = {
+          assetId: pair_2_asset_id,
+          value: user_received_pair_2,
+        };
 
-      // pool_pair_1_liquidity değerine user_supply_total değerine ekle ve sonuca new_pool_pair_1_liquidity ismini ver. Bu değeri havuzun güncel pair 1 liquidity miktarı olarak ata.
-      const new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + user_supply_total);
+        // pool_pair_1_liquidity değerine user_supply_total değerine ekle ve sonuca new_pool_pair_1_liquidity ismini ver. Bu değeri havuzun güncel pair 1 liquidity miktarı olarak ata.
+        new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + user_supply_total);
 
-      // pool_pair_2_liquidity değerinden user_received_pair_2 değerini çıkar ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
-      const new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - user_received_pair_2);
+        // pool_pair_2_liquidity değerinden user_received_pair_2 değerini çıkar ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
+        new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - user_received_pair_2);
+      }
 
       return {
+        errorMessages,
         method,
         pool_pair_1_liquidity,
         pool_pair_2_liquidity,
