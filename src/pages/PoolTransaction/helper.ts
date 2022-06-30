@@ -101,9 +101,13 @@ export const poolTransaction = async (transactionId: string) => {
       const constant_coefficient = Math.floor(pool_pair_1_liquidity + user_supply_available);
 
       //   8-constant_coefficient’ı pair_1_coefficient ’a böl ve bölüm sonucunu bir tam sayı olarak ele alıp constant_coefficient_downgraded ismini ver.
+      const pair_1_pool_supply = new Decimal(poolData.quote.value).mul(100000000).toNumber();
+
+      const pair_2_pool_supply = new Decimal(poolData.token.value).mul(100000000).toNumber();
+
       const pair_1_coefficient = 20;
 
-      const pair_2_coefficient = 1000000;
+      const pair_2_coefficient = (pair_2_pool_supply / pair_1_pool_supply) * pair_1_coefficient;
 
       const constant_coefficient_downgraded = Math.floor(constant_coefficient / pair_1_coefficient);
 
