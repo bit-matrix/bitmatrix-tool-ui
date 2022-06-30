@@ -86,7 +86,7 @@ export const CommitmentOutputToPoolTool = () => {
               <div key={key}>
                 <InputGroup>
                   <Input value={cmtTxInOutpoint} disabled />
-                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment Tx Input Outpoint has been copied to clipboard!</Tooltip>}>
                     <InputGroup.Button onClick={() => navigator.clipboard.writeText(cmtTxInOutpoint || "")}>
                       <CopyIcon width="1rem" height="1rem" />
                     </InputGroup.Button>
@@ -103,7 +103,7 @@ export const CommitmentOutputToPoolTool = () => {
           <h6>Pool Id</h6>
           <InputGroup>
             <Input value={result.poolId} disabled />
-            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Pool Id has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.poolId || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
@@ -113,7 +113,7 @@ export const CommitmentOutputToPoolTool = () => {
           <h6>Method Call</h6>
           <InputGroup>
             <Input value={result.methodCall} disabled />
-            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Method Call has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.methodCall || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
@@ -123,7 +123,7 @@ export const CommitmentOutputToPoolTool = () => {
           <h6>Public Key</h6>
           <InputGroup>
             <Input value={result.publicKey} disabled />
-            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Public Key has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.publicKey || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
@@ -133,17 +133,17 @@ export const CommitmentOutputToPoolTool = () => {
           <h6>Slippage Tolerance</h6>
           <InputGroup>
             <Input value={result.slippageTolerance} disabled />
-            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Slippage Tolerance has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.slippageTolerance || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
 
-          <h6>Ordering Fees</h6>
+          <h6>Ordering Fee</h6>
           <InputGroup>
             <Input value={result.orderingFee} disabled />
-            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Ordering Fee has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.orderingFee || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
@@ -155,7 +155,7 @@ export const CommitmentOutputToPoolTool = () => {
           <h6>Commitment Output-1 Value</h6>
           <InputGroup>
             <Input value={result.cmtOutput1Value} disabled />
-            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment Output 1 Value has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.cmtOutput1Value || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
@@ -165,7 +165,7 @@ export const CommitmentOutputToPoolTool = () => {
           <h6>Output-2 Pair Value</h6>
           <InputGroup>
             <Input value={result.output2PairValue} disabled />
-            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Output 2 Pair Value has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.output2PairValue || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
@@ -175,7 +175,7 @@ export const CommitmentOutputToPoolTool = () => {
           <h6>Commitment Output-2 Value</h6>
           <InputGroup>
             <Input value={result.cmtOutput2Value} disabled />
-            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment Output 2 Value has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.cmtOutput2Value || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
@@ -187,16 +187,16 @@ export const CommitmentOutputToPoolTool = () => {
               <h6>Commitment Output-3 Value</h6>
               <InputGroup>
                 <Input value={result.cmtOutput3Value} disabled />
-                <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment Output 3 Value has been copied to clipboard!</Tooltip>}>
                   <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.cmtOutput3Value || "")}>
                     <CopyIcon width="1rem" height="1rem" />
                   </InputGroup.Button>
                 </Whisper>
               </InputGroup>
-              <h6>Commitment Output-3 PairValue</h6>
+              <h6>Commitment Output-3 Pair Value</h6>
               <InputGroup>
                 <Input value={result.cmtOutput3PairValue} disabled />
-                <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment Output 3 Pair Value has been copied to clipboard!</Tooltip>}>
                   <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.cmtOutput3PairValue || "")}>
                     <CopyIcon width="1rem" height="1rem" />
                   </InputGroup.Button>
@@ -206,7 +206,7 @@ export const CommitmentOutputToPoolTool = () => {
               <h6>Commitment Output-3 Asset</h6>
               <InputGroup>
                 <Input value={result.cmtOutput3Asset} disabled />
-                <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment Output 3 Asset has been copied to clipboard!</Tooltip>}>
                   <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.cmtOutput3Asset || "")}>
                     <CopyIcon width="1rem" height="1rem" />
                   </InputGroup.Button>
@@ -225,20 +225,19 @@ export const CommitmentOutputToPoolTool = () => {
                 <h6>Change Output {changeOutput.index}</h6>
 
                 <h6> Change Output Asset + Value </h6>
-
                 <InputGroup>
                   <Input value={changeOutput.assetValue} disabled />
-                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Change Output Asset + Value has been copied to clipboard!</Tooltip>}>
                     <InputGroup.Button onClick={() => navigator.clipboard.writeText(changeOutput.assetValue || "")}>
                       <CopyIcon width="1rem" height="1rem" />
                     </InputGroup.Button>
                   </Whisper>
                 </InputGroup>
-                <h6> Change Output Nonce + Script Pub Key</h6>
 
+                <h6> Change Output Nonce + Script Pub Key</h6>
                 <InputGroup>
                   <Input value={changeOutput.noncScpkey} disabled />
-                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Change Output Nonce + Script Pubkey has been copied to clipboard!</Tooltip>}>
                     <InputGroup.Button onClick={() => navigator.clipboard.writeText(changeOutput.noncScpkey || "")}>
                       <CopyIcon width="1rem" height="1rem" />
                     </InputGroup.Button>
@@ -260,7 +259,7 @@ export const CommitmentOutputToPoolTool = () => {
                 <h6>Change Asset </h6>
                 <InputGroup>
                   <Input value={seperatedChangeOutput.asset} disabled />
-                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Change Asset has been copied to clipboard!</Tooltip>}>
                     <InputGroup.Button onClick={() => navigator.clipboard.writeText(seperatedChangeOutput.asset || "")}>
                       <CopyIcon width="1rem" height="1rem" />
                     </InputGroup.Button>
@@ -270,7 +269,7 @@ export const CommitmentOutputToPoolTool = () => {
                 <h6>Change Amount </h6>
                 <InputGroup>
                   <Input value={seperatedChangeOutput.amount} disabled />
-                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Change Amount has been copied to clipboard!</Tooltip>}>
                     <InputGroup.Button onClick={() => navigator.clipboard.writeText(seperatedChangeOutput.amount || "")}>
                       <CopyIcon width="1rem" height="1rem" />
                     </InputGroup.Button>
@@ -280,17 +279,17 @@ export const CommitmentOutputToPoolTool = () => {
                 <h6>Change Nonce </h6>
                 <InputGroup>
                   <Input value={seperatedChangeOutput.nonce} disabled />
-                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Change Nonce has been copied to clipboard!</Tooltip>}>
                     <InputGroup.Button onClick={() => navigator.clipboard.writeText(seperatedChangeOutput.nonce || "")}>
                       <CopyIcon width="1rem" height="1rem" />
                     </InputGroup.Button>
                   </Whisper>
                 </InputGroup>
 
-                <h6>Change Script Pub Key </h6>
+                <h6>Change Script Pubkey </h6>
                 <InputGroup>
                   <Input value={seperatedChangeOutput.scriptpubkey} disabled />
-                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Change Script Pubkeys has been copied to clipboard!</Tooltip>}>
                     <InputGroup.Button onClick={() => navigator.clipboard.writeText(seperatedChangeOutput.scriptpubkey || "")}>
                       <CopyIcon width="1rem" height="1rem" />
                     </InputGroup.Button>
