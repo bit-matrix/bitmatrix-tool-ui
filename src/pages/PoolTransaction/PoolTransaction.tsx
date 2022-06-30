@@ -16,6 +16,7 @@ export const PoolTransaction = () => {
     setLoad(true);
 
     const cof = await poolTransaction(transactionId);
+
     setResult({
       errorMessages: cof.errorMessages,
       pool_pair_1_liquidity: cof.pool_pair_1_liquidity,
@@ -37,6 +38,8 @@ export const PoolTransaction = () => {
       user_received_pair_2_apx: cof.user_received_pair_2_apx,
       payout_additional_fees: cof.payout_additional_fees,
       user_received_pair_2: cof.user_received_pair_2,
+      new_pool_pair_1_liquidity: cof.new_pool_pair_1_liquidity,
+      new_pool_pair_2_liquidity: cof.new_pool_pair_2_liquidity,
     });
 
     setLoad(false);
@@ -233,6 +236,24 @@ export const PoolTransaction = () => {
             <Input value={result.user_received_pair_2} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment output has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.user_received_pair_2 || "")}>
+                <CopyIcon width="1rem" height="1rem" />
+              </InputGroup.Button>
+            </Whisper>
+          </InputGroup>
+          <h6>New Pool Pair 1 Liquidity</h6>
+          <InputGroup>
+            <Input value={result.new_pool_pair_1_liquidity} disabled />
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>New Pool Pair 1 has been copied to clipboard!</Tooltip>}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.new_pool_pair_1_liquidity || "")}>
+                <CopyIcon width="1rem" height="1rem" />
+              </InputGroup.Button>
+            </Whisper>
+          </InputGroup>
+          <h6>New Pool Pair 2 Liquidity</h6>
+          <InputGroup>
+            <Input value={result.new_pool_pair_2_liquidity} disabled />
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>New Pool Pair 1 has been copied to clipboard!</Tooltip>}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.new_pool_pair_2_liquidity || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
