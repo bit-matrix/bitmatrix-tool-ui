@@ -3,7 +3,7 @@ import Decimal from "decimal.js";
 import { convertion } from "@script-wiz/lib-core";
 import WizData from "@script-wiz/wiz-data";
 
-const poolData = {
+export const poolData = {
   id: "d3ffddaf4e61517bd0a538507d4164a8881edfd38329e0112338fd1894c2c0d1",
   quote: {
     ticker: "tL-BTC",
@@ -193,6 +193,8 @@ export const poolTransaction = async (transactionId: string) => {
         output,
         new_pool_pair_1_liquidity,
         new_pool_pair_2_liquidity,
+        lp_liquidty: poolData.lp.value,
+        new_lp_liquidty: poolData.lp.value,
       };
     default:
       return {};

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Divider, Input, InputGroup, Loader, Tooltip, Whisper } from "rsuite";
 import CopyIcon from "../../components/Svg/Icons/Copy";
-import { poolTransaction } from "./helper";
+import { poolData, poolTransaction } from "./helper";
 import "./poolTransaction.css";
 
 export const PoolTransaction = () => {
@@ -40,6 +40,8 @@ export const PoolTransaction = () => {
       user_received_pair_2: cof.user_received_pair_2,
       new_pool_pair_1_liquidity: cof.new_pool_pair_1_liquidity,
       new_pool_pair_2_liquidity: cof.new_pool_pair_2_liquidity,
+      lp_liquidty: cof.lp_liquidty,
+      new_lp_liquidty: cof.new_lp_liquidty,
     });
 
     setLoad(false);
@@ -81,6 +83,15 @@ export const PoolTransaction = () => {
             <Input value={result.pool_pair_2_liquidity} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Pool Pair 2 Liquidity has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.pool_pair_2_liquidity || "")}>
+                <CopyIcon width="1rem" height="1rem" />
+              </InputGroup.Button>
+            </Whisper>
+          </InputGroup>
+          <h6>LP Liquidity</h6>
+          <InputGroup>
+            <Input value={result.lp_liquidty} disabled />
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>LP Liquidity has been copied to clipboard!</Tooltip>}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.lp_liquidty || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -254,6 +265,15 @@ export const PoolTransaction = () => {
             <Input value={result.new_pool_pair_2_liquidity} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>New Pool Pair 1 has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.new_pool_pair_2_liquidity || "")}>
+                <CopyIcon width="1rem" height="1rem" />
+              </InputGroup.Button>
+            </Whisper>
+          </InputGroup>
+          <h6>New LP Liquidity</h6>
+          <InputGroup>
+            <Input value={result.new_lp_liquidty} disabled />
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>New LP Liquidity has been copied to clipboard!</Tooltip>}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.new_lp_liquidty || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
