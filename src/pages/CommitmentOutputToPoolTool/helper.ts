@@ -166,7 +166,7 @@ export const commitmentTxOutputsFragmentation = async (txId: string) => {
       return {
         index: index + 1,
         asset: "01" + hexLE(co.asset),
-        value: convertion.numToLE64(WizData.fromNumber(new Decimal(co.value).mul(100000000).toNumber())).hex,
+        value: "01" + hexLE(convertion.numToLE64(WizData.fromNumber(new Decimal(co.value).mul(100000000).toNumber())).hex),
         amount: "01" + convertion.numToLE64(WizData.fromNumber(new Decimal(co.value).mul(100000000).toNumber())).hex,
         nonce: "00",
         scriptpubkey: WizData.fromNumber(co.scriptPubKey.hex.length / 2).hex + co.scriptPubKey.hex,
