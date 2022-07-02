@@ -2,6 +2,7 @@ import { commitmentTxOutputsFragmentation } from "../CommitmentOutputToPoolTool/
 import Decimal from "decimal.js";
 import { convertion } from "@script-wiz/lib-core";
 import WizData from "@script-wiz/wiz-data";
+import { CTXPTXResult } from "./CTXPTXResult";
 
 export const poolData = {
   id: "d3ffddaf4e61517bd0a538507d4164a8881edfd38329e0112338fd1894c2c0d1",
@@ -45,158 +46,246 @@ export const poolData = {
 
 export const poolTransaction = async (transactionId: string) => {
   const cof = await commitmentTxOutputsFragmentation(transactionId);
+  const method = cof.methodCall;
+
   let errorMessages = [];
+
   let output = {
     assetId: "",
     value: 0,
   };
-  let new_pool_pair_1_liquidity = undefined;
-  let new_pool_pair_2_liquidity = undefined;
-  const method = cof.methodCall;
+
+  const result: CTXPTXResult = {
+    new_pool_pair_1_liquidity: 0,
+    new_pool_pair_2_liquidity: 0,
+    user_supply_total: 0,
+    user_supply_lp_fees: 0,
+    user_supply_available: 0,
+    constant_coefficient: 0,
+    constant_coefficient_downgraded: 0,
+    new_pair_1_pool_liquidity_apx_1: 0,
+    new_pair_1_pool_liquidity_apx_2: 0,
+    payout_additional_fees: 0,
+    user_received_pair_1_apx: 0,
+    user_received_pair_1: 0,
+    new_pair_2_pool_liquidity_apx_1: 0,
+    new_pair_2_pool_liquidity_apx_2: 0,
+    user_received_pair_2_apx: 0,
+    user_received_pair_2: 0,
+  };
+
   //const poolId = cof.poolId;
 
   //get pool
   //const poolReq = await axios.get(`https://rocksdb.basebitmatrix.com/pools/${poolId}`);
   //const poolData = poolReq.data;
-  switch (method) {
-    case "01":
-      // 1-Havuzun güncel pair_1 liquidity miktarına pool_pair_1_liquidity ismini ver.
-      const pool_pair_1_liquidity = Number(poolData.quote.value);
 
-      // 2-Havuzun güncel pair_2 liquidity miktarına pool_pair_2_liquidity ismini ver.
-      const pool_pair_2_liquidity = Number(poolData.token.value);
+  // 1-Havuzun güncel pair_1 liquidity miktarına pool_pair_1_liquidity ismini ver.
+  const pool_pair_1_liquidity = Number(poolData.quote.value);
 
-      // transaction outputs
-      const commitmentOutputs = cof.outputs;
+  // 2-Havuzun güncel pair_2 liquidity miktarına pool_pair_2_liquidity ismini ver.
+  const pool_pair_2_liquidity = Number(poolData.token.value);
 
-      //3-Commitment output 2 asset ID’sinin pair_1_asset_id olduğunu kontrol et.
-      const commitmentOutput2 = commitmentOutputs[2];
-      const commitmentOutput2AssetId = commitmentOutput2.asset;
+  // transaction outputs
+  const commitmentOutputs = cof.outputs;
 
-      //pool detail rocks db den geldiği için asset, yeni pool modelde assetHash olacak
-      const pair_1_asset_id = poolData.quote.asset;
-      const pair_2_asset_id = poolData.token.asset;
+  //commitment output 2
+  const commitmentOutput2 = commitmentOutputs[2];
 
-      if (commitmentOutput2AssetId !== pair_1_asset_id) errorMessages.push("commitmentOutput2AssetId must be equal to pair_1_asset_id");
+  // commitment Output2 Asset Id
+  const commitmentOutput2AssetId = commitmentOutput2.asset;
 
-      //   4-Commitment output 2 miktarına user_supply_total ismini ver.
-      const user_supply_total = new Decimal(commitmentOutput2.value).mul(100000000).toNumber();
+  //pool detail rocks db den geldiği için asset, yeni pool modelde assetHash olacak
+  const pair_1_asset_id = poolData.quote.asset;
+  const pair_2_asset_id = poolData.token.asset;
 
-      if (user_supply_total > pool_pair_1_liquidity) {
-        errorMessages.push("Supply overflow");
+  const pair_1_pool_supply = Number(poolData.quote.value);
 
-        output.assetId = pair_1_asset_id;
-        output.value = user_supply_total;
-        new_pool_pair_1_liquidity = pool_pair_1_liquidity;
-        new_pool_pair_2_liquidity = pool_pair_2_liquidity;
-      }
+  const pair_2_pool_supply = Number(poolData.token.value);
 
-      //5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
-      const user_supply_lp_fees = Math.floor(user_supply_total / 500);
+  const pair_1_coefficient = 20;
 
-      //   6-user_supply_total’ dan user_supply_lp_fees’ı çıkar ve sonuca user_supply_available ismini ver.
-      const user_supply_available = Math.floor(user_supply_total - user_supply_lp_fees);
+  const pair_2_coefficient = Math.floor(pair_2_pool_supply / pair_1_pool_supply) * pair_1_coefficient;
 
-      //   7-pool_pair_1_liquidity ile user_supply_available’i topla ve sonuca constant_coefficient ismini ver.
-      const constant_coefficient = Math.floor(pool_pair_1_liquidity + user_supply_available);
+  //   9-pool_pair_1_liquidity değerini pair_1_coefficient’a böl ve sonuca pool_pair_1_liquidity_downgraded ismini ver
+  const pool_pair_1_liquidity_downgraded = Math.floor(pool_pair_1_liquidity / pair_1_coefficient);
 
-      //   8-constant_coefficient’ı pair_1_coefficient ’a böl ve bölüm sonucunu bir tam sayı olarak ele alıp constant_coefficient_downgraded ismini ver.
-      const pair_1_pool_supply = Number(poolData.quote.value);
+  // 10-pool_pair_2_liquidity değerini pair_2_coefficient’a böl ve sonuca pool_pair_2_liquidity_downgraded ismini ver
+  const pool_pair_2_liquidity_downgraded = Math.floor(pool_pair_2_liquidity / pair_2_coefficient);
 
-      const pair_2_pool_supply = Number(poolData.token.value);
+  // 11-pool_pair_1_liquidity_downgraded ile pool_pair_2_liquidity_downgraded ‘I çarp ve sonuca pool_constant ismini ver.
+  const pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
 
-      const pair_1_coefficient = 20;
+  if (method === "01") {
+    //3-Commitment output 2 asset ID’sinin pair_1_asset_id olduğunu kontrol et.
+    if (commitmentOutput2AssetId !== pair_1_asset_id) errorMessages.push("Commitment Output 2 AssetId must be equal to pair_1_asset_id");
 
-      const pair_2_coefficient = Math.floor(pair_2_pool_supply / pair_1_pool_supply) * pair_1_coefficient;
+    //   4-Commitment output 2 miktarına user_supply_total ismini ver.
+    result.user_supply_total = new Decimal(commitmentOutput2.value).mul(100000000).toNumber();
 
-      const constant_coefficient_downgraded = Math.floor(constant_coefficient / pair_1_coefficient);
+    if (result.user_supply_total > pool_pair_1_liquidity) {
+      errorMessages.push("Supply overflow");
 
-      //   9-pool_pair_1_liquidity değerini pair_1_coefficient’a böl ve sonuca pool_pair_1_liquidity_downgraded ismini ver
-      const pool_pair_1_liquidity_downgraded = Math.floor(pool_pair_1_liquidity / pair_1_coefficient);
+      output.assetId = pair_1_asset_id;
+      output.value = result.user_supply_total;
+      result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
+      result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+    }
 
-      // 10-pool_pair_2_liquidity değerini pair_2_coefficient’a böl ve sonuca pool_pair_2_liquidity_downgraded ismini ver
-      const pool_pair_2_liquidity_downgraded = Math.floor(pool_pair_2_liquidity / pair_2_coefficient);
+    //5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
+    result.user_supply_lp_fees = Math.floor(result.user_supply_total / 500);
 
-      // 11-pool_pair_1_liquidity_downgraded ile pool_pair_2_liquidity_downgraded ‘I çarp ve sonuca pool_constant ismini ver.
-      const pool_constant = Math.floor(pool_pair_1_liquidity_downgraded * pool_pair_2_liquidity_downgraded);
+    //   6-user_supply_total’ dan user_supply_lp_fees’ı çıkar ve sonuca user_supply_available ismini ver.
+    result.user_supply_available = Math.floor(result.user_supply_total - result.user_supply_lp_fees);
 
-      // 12-pool_constant değerini constant_coefficient_downgraded ‘e böl ve sonuca new_pair_2_pool_liquidity_apx_1 ismini ver.
-      const new_pair_2_pool_liquidity_apx_1 = Math.floor(pool_constant / constant_coefficient_downgraded);
+    //   7-pool_pair_1_liquidity ile user_supply_available’i topla ve sonuca constant_coefficient ismini ver.
+    result.constant_coefficient = Math.floor(pool_pair_1_liquidity + result.user_supply_available);
 
-      // 13-new_pair_2_pool_liquidity_apx_1 değerini pair_2_coefficient ile çarp ve sonuca new_pair_2_pool_liquidity_apx_2 ismini ver.
-      const new_pair_2_pool_liquidity_apx_2 = Math.floor(new_pair_2_pool_liquidity_apx_1 * pair_2_coefficient);
+    //   8-constant_coefficient’ı pair_1_coefficient ’a böl ve bölüm sonucunu bir tam sayı olarak ele alıp constant_coefficient_downgraded ismini ver.
 
-      // 14-pool_pair_2_liquidity değerinden new_pair_2_pool_liquidity_apx_2 değerini çıkar ve sonuca user_received_pair_2_apx ismini ver.
-      const user_received_pair_2_apx = Math.floor(pool_pair_2_liquidity - new_pair_2_pool_liquidity_apx_2);
+    result.constant_coefficient_downgraded = Math.floor(result.constant_coefficient / pair_1_coefficient);
 
-      // 15-pair_2_coefficient değerini 2 ile çarp ve sonuca payout_additional_fees ismini ver.
-      const payout_additional_fees = Math.floor(pair_2_coefficient * 2);
+    // 12-pool_constant değerini constant_coefficient_downgraded ‘e böl ve sonuca new_pair_2_pool_liquidity_apx_1 ismini ver.
+    const new_pair_2_pool_liquidity_apx_1 = Math.floor(pool_constant / result.constant_coefficient_downgraded);
 
-      // 16-user_received_pair_2_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_2 ismini ver.
-      const user_received_pair_2 = Math.floor(user_received_pair_2_apx - payout_additional_fees);
+    // 13-new_pair_2_pool_liquidity_apx_1 değerini pair_2_coefficient ile çarp ve sonuca new_pair_2_pool_liquidity_apx_2 ismini ver.
+    const new_pair_2_pool_liquidity_apx_2 = Math.floor(new_pair_2_pool_liquidity_apx_1 * pair_2_coefficient);
 
-      if (user_received_pair_2 < Math.floor(22 * pair_2_coefficient)) {
-        errorMessages.push("Dust payout");
+    // 14-pool_pair_2_liquidity değerinden new_pair_2_pool_liquidity_apx_2 değerini çıkar ve sonuca user_received_pair_2_apx ismini ver.
+    const user_received_pair_2_apx = Math.floor(pool_pair_2_liquidity - new_pair_2_pool_liquidity_apx_2);
 
-        output.assetId = pair_1_asset_id;
-        output.value = user_supply_total;
-        new_pool_pair_1_liquidity = pool_pair_1_liquidity;
-        new_pool_pair_2_liquidity = pool_pair_2_liquidity;
-      }
+    // 15-pair_2_coefficient değerini 2 ile çarp ve sonuca payout_additional_fees ismini ver.
+    result.payout_additional_fees = Math.floor(pair_2_coefficient * 2);
 
-      if (user_received_pair_2 < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
-        errorMessages.push("Out of slippage");
+    // 16-user_received_pair_2_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_2 ismini ver.
+    const user_received_pair_2 = Math.floor(user_received_pair_2_apx - result.payout_additional_fees);
 
-        output.assetId = pair_1_asset_id;
-        output.value = user_supply_total;
-        new_pool_pair_1_liquidity = pool_pair_1_liquidity;
-        new_pool_pair_2_liquidity = pool_pair_2_liquidity;
-      }
+    if (user_received_pair_2 < Math.floor(22 * pair_2_coefficient)) {
+      errorMessages.push("Dust payout");
 
-      if (errorMessages.length === 0) {
-        //SUCCESS
-        // İlgili slot için 1 tane settlement output oluştur. Bu outputun asset ID ‘sini pair_2_asset id si olarak ayarla, miktarını da user_received_pair_2 olarak ayarla.
-        output = {
-          assetId: pair_2_asset_id,
-          value: user_received_pair_2,
-        };
+      output.assetId = pair_1_asset_id;
+      output.value = result.user_supply_total;
+      result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
+      result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+    }
 
-        // pool_pair_1_liquidity değerine user_supply_total değerine ekle ve sonuca new_pool_pair_1_liquidity ismini ver. Bu değeri havuzun güncel pair 1 liquidity miktarı olarak ata.
-        new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + user_supply_total);
+    if (user_received_pair_2 < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
+      errorMessages.push("Out of slippage");
 
-        // pool_pair_2_liquidity değerinden user_received_pair_2 değerini çıkar ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
-        new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - user_received_pair_2);
-      }
+      output.assetId = pair_1_asset_id;
+      output.value = result.user_supply_total;
+      result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
+      result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+    }
 
-      return {
-        errorMessages,
-        method,
-        pool_pair_1_liquidity,
-        pool_pair_2_liquidity,
-        commitmentOutput2AssetId,
-        pair_1_asset_id,
-        user_supply_total,
-        user_supply_lp_fees,
-        user_supply_available,
-        constant_coefficient,
-        pair_1_coefficient,
-        pair_2_coefficient,
-        constant_coefficient_downgraded,
-        pool_pair_1_liquidity_downgraded,
-        pool_pair_2_liquidity_downgraded,
-        pool_constant,
-        new_pair_2_pool_liquidity_apx_1,
-        new_pair_2_pool_liquidity_apx_2,
-        user_received_pair_2_apx,
-        payout_additional_fees,
-        user_received_pair_2,
-        output,
-        new_pool_pair_1_liquidity,
-        new_pool_pair_2_liquidity,
-        lp_liquidty: poolData.lp.value,
-        new_lp_liquidty: poolData.lp.value,
+    if (errorMessages.length === 0) {
+      //SUCCESS
+      // İlgili slot için 1 tane settlement output oluştur. Bu outputun asset ID ‘sini pair_2_asset id si olarak ayarla, miktarını da user_received_pair_2 olarak ayarla.
+      output = {
+        assetId: pair_2_asset_id,
+        value: user_received_pair_2,
       };
-    default:
-      return {};
+
+      // pool_pair_1_liquidity değerine user_supply_total değerine ekle ve sonuca new_pool_pair_1_liquidity ismini ver. Bu değeri havuzun güncel pair 1 liquidity miktarı olarak ata.
+      result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + result.user_supply_total);
+
+      // pool_pair_2_liquidity değerinden user_received_pair_2 değerini çıkar ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
+      result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - user_received_pair_2);
+    }
+  } else if (method === "02") {
+    console.log(method);
+
+    // 3- Commitment output 2 asset ID’sinin pair_2_asset_id olduğunu kontrol et.
+    if (commitmentOutput2AssetId !== pair_2_asset_id) errorMessages.push("Commitment Output 2 AssetId must be equal to pair_1_asset_id");
+
+    // 4- Commitment output 2 miktarına user_supply_total ismini ver.
+    result.user_supply_total = new Decimal(commitmentOutput2.value).mul(100000000).toNumber();
+
+    // 5- user_supply_total ‘ı 500’e böl ve bölüm sonucu bir tam sayı olarak ele alıp user_supply_lp_fees ismini ver.
+    result.user_supply_lp_fees = Math.floor(result.user_supply_total / 500);
+
+    if (result.user_supply_total > pool_pair_2_liquidity) {
+      errorMessages.push("Supply overflow");
+
+      output.assetId = pair_2_asset_id;
+      output.value = result.user_supply_total;
+      result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
+      result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+    }
+
+    // 6- user_supply_total ’dan user_supply_lp_fees ’ı çıkar ve sonuca user_supply_available ismini ver.
+    result.user_supply_available = Math.floor(result.user_supply_total - result.user_supply_lp_fees);
+
+    // 7-pool_pair_2_liquidity ile user_supply_available ’i topla ve sonuca constant_coefficient ismini ver.
+    result.constant_coefficient = Math.floor(pool_pair_2_liquidity + result.user_supply_available);
+
+    // 8- constant_coefficient ’ı pair_2_coefficient ’a böl ve bölüm sonucunu bir tam sayı olarak ele alıp constant_coefficient_downgraded ismini ver.
+    result.constant_coefficient_downgraded = Math.floor(result.constant_coefficient / pair_2_coefficient);
+
+    // 12- pool_constant değerini constant_coefficient_downgraded ‘e böl ve sonuca new_pair_1_pool_liquidity_apx_1 ismini ver
+
+    result.new_pair_1_pool_liquidity_apx_1 = Math.floor(pool_constant / result.constant_coefficient_downgraded);
+
+    // 13- new_pair_1_pool_liquidity_apx_1 değerini pair_1_coefficient ile çarp ve sonuca new_pair_1_pool_liquidity_apx_2 ismini ver.
+    result.new_pair_1_pool_liquidity_apx_2 = Math.floor(result.new_pair_1_pool_liquidity_apx_1 * pair_1_coefficient);
+
+    // 14- pool_pair_1_liquidity değerinden new_pair_1_pool_liquidity_apx_2 değerini çıkar ve sonuca user_received_pair_1_apx ismini ver.
+    const user_received_pair_1_apx = Math.floor(pool_pair_1_liquidity - result.new_pair_1_pool_liquidity_apx_2);
+
+    // 15- pair_1_coefficient değerini 2 ile çarp ve sonuca payout_additional_fees ismini ver.
+    result.payout_additional_fees = Math.floor(pair_1_coefficient * 2);
+
+    // 16- user_received_pair_1_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_1 ismini ver.
+    result.user_received_pair_1 = Math.floor(user_received_pair_1_apx - result.payout_additional_fees);
+
+    if (result.user_received_pair_1 < Math.floor(22 * pair_1_coefficient)) {
+      errorMessages.push("Dust payout");
+
+      output.assetId = pair_2_asset_id;
+      output.value = result.user_supply_total;
+      result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
+      result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+    }
+    if (result.user_received_pair_1 < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
+      errorMessages.push("Out of slippage");
+
+      output.assetId = pair_2_asset_id;
+      output.value = result.user_supply_total;
+      result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
+      result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+    }
+
+    if (errorMessages.length === 0) {
+      //SUCCESS
+      // İlgili slot için 1 tane settlement output oluştur. Bu outputun asset ID ‘sini pair_1_asset id si olarak ayarla, miktarını da user_received_pair_1 olarak ayarla.
+      output = {
+        assetId: pair_1_asset_id,
+        value: result.user_received_pair_1,
+      };
+
+      // pool_pair_2_liquidity değerine user_supply_total değerine ekle ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
+      result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity + result.user_supply_total);
+
+      // pool_pair_1_liquidity değerinden user_received_pair_1 değerini çıkar ve sonuca new_pool_pair_1_liquidity ismini ver. Bu değeri havuzun güncel pair 1 liquidity miktarı olarak ata.
+      result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity - result.user_received_pair_1);
+    }
   }
+  return {
+    errorMessages,
+    pool_pair_1_liquidity,
+    pool_pair_2_liquidity,
+    commitmentOutput2AssetId,
+    pair_1_asset_id,
+    pair_2_asset_id,
+    pair_1_pool_supply,
+    pair_2_pool_supply,
+    pair_1_coefficient,
+    pair_2_coefficient,
+    pool_pair_1_liquidity_downgraded,
+    pool_pair_2_liquidity_downgraded,
+    pool_constant,
+    lp_liquidty: poolData.lp.value,
+    new_lp_liquidty: poolData.lp.value,
+    result,
+  };
 };
