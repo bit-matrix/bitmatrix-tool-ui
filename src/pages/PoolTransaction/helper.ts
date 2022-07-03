@@ -146,21 +146,21 @@ export const poolTransaction = async (transactionId: string) => {
     result.constant_coefficient_downgraded = Math.floor(result.constant_coefficient / pair_1_coefficient);
 
     // 12-pool_constant değerini constant_coefficient_downgraded ‘e böl ve sonuca new_pair_2_pool_liquidity_apx_1 ismini ver.
-    const new_pair_2_pool_liquidity_apx_1 = Math.floor(pool_constant / result.constant_coefficient_downgraded);
+    result.new_pair_2_pool_liquidity_apx_1 = Math.floor(pool_constant / result.constant_coefficient_downgraded);
 
     // 13-new_pair_2_pool_liquidity_apx_1 değerini pair_2_coefficient ile çarp ve sonuca new_pair_2_pool_liquidity_apx_2 ismini ver.
-    const new_pair_2_pool_liquidity_apx_2 = Math.floor(new_pair_2_pool_liquidity_apx_1 * pair_2_coefficient);
+    result.new_pair_2_pool_liquidity_apx_2 = Math.floor(result.new_pair_2_pool_liquidity_apx_1 * pair_2_coefficient);
 
     // 14-pool_pair_2_liquidity değerinden new_pair_2_pool_liquidity_apx_2 değerini çıkar ve sonuca user_received_pair_2_apx ismini ver.
-    const user_received_pair_2_apx = Math.floor(pool_pair_2_liquidity - new_pair_2_pool_liquidity_apx_2);
+    result.user_received_pair_2_apx = Math.floor(pool_pair_2_liquidity - result.new_pair_2_pool_liquidity_apx_2);
 
     // 15-pair_2_coefficient değerini 2 ile çarp ve sonuca payout_additional_fees ismini ver.
     result.payout_additional_fees = Math.floor(pair_2_coefficient * 2);
 
     // 16-user_received_pair_2_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_2 ismini ver.
-    const user_received_pair_2 = Math.floor(user_received_pair_2_apx - result.payout_additional_fees);
+    result.user_received_pair_2 = Math.floor(result.user_received_pair_2_apx - result.payout_additional_fees);
 
-    if (user_received_pair_2 < Math.floor(22 * pair_2_coefficient)) {
+    if (result.user_received_pair_2 < Math.floor(22 * pair_2_coefficient)) {
       errorMessages.push("Dust payout");
 
       output.assetId = pair_1_asset_id;
@@ -169,7 +169,7 @@ export const poolTransaction = async (transactionId: string) => {
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
     }
 
-    if (user_received_pair_2 < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
+    if (result.user_received_pair_2 < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
       errorMessages.push("Out of slippage");
 
       output.assetId = pair_1_asset_id;
@@ -183,14 +183,14 @@ export const poolTransaction = async (transactionId: string) => {
       // İlgili slot için 1 tane settlement output oluştur. Bu outputun asset ID ‘sini pair_2_asset id si olarak ayarla, miktarını da user_received_pair_2 olarak ayarla.
       output = {
         assetId: pair_2_asset_id,
-        value: user_received_pair_2,
+        value: result.user_received_pair_2,
       };
 
       // pool_pair_1_liquidity değerine user_supply_total değerine ekle ve sonuca new_pool_pair_1_liquidity ismini ver. Bu değeri havuzun güncel pair 1 liquidity miktarı olarak ata.
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + result.user_supply_total);
 
       // pool_pair_2_liquidity değerinden user_received_pair_2 değerini çıkar ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
-      result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - user_received_pair_2);
+      result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - result.user_received_pair_2);
     }
   } else if (method === "02") {
     console.log(method);
@@ -230,13 +230,13 @@ export const poolTransaction = async (transactionId: string) => {
     result.new_pair_1_pool_liquidity_apx_2 = Math.floor(result.new_pair_1_pool_liquidity_apx_1 * pair_1_coefficient);
 
     // 14- pool_pair_1_liquidity değerinden new_pair_1_pool_liquidity_apx_2 değerini çıkar ve sonuca user_received_pair_1_apx ismini ver.
-    const user_received_pair_1_apx = Math.floor(pool_pair_1_liquidity - result.new_pair_1_pool_liquidity_apx_2);
+    result.user_received_pair_1_apx = Math.floor(pool_pair_1_liquidity - result.new_pair_1_pool_liquidity_apx_2);
 
     // 15- pair_1_coefficient değerini 2 ile çarp ve sonuca payout_additional_fees ismini ver.
     result.payout_additional_fees = Math.floor(pair_1_coefficient * 2);
 
     // 16- user_received_pair_1_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_1 ismini ver.
-    result.user_received_pair_1 = Math.floor(user_received_pair_1_apx - result.payout_additional_fees);
+    result.user_received_pair_1 = Math.floor(result.user_received_pair_1_apx - result.payout_additional_fees);
 
     if (result.user_received_pair_1 < Math.floor(22 * pair_1_coefficient)) {
       errorMessages.push("Dust payout");
@@ -272,6 +272,7 @@ export const poolTransaction = async (transactionId: string) => {
   }
   return {
     errorMessages,
+    method,
     pool_pair_1_liquidity,
     pool_pair_2_liquidity,
     commitmentOutput2AssetId,
