@@ -193,8 +193,6 @@ export const poolTransaction = async (transactionId: string) => {
       result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity - result.user_received_pair_2);
     }
   } else if (method === "02") {
-    console.log(method);
-
     // 3- Commitment output 2 asset ID’sinin pair_2_asset_id olduğunu kontrol et.
     if (commitmentOutput2AssetId !== pair_2_asset_id) errorMessages.push("Commitment Output 2 AssetId must be equal to pair_1_asset_id");
 
@@ -246,6 +244,7 @@ export const poolTransaction = async (transactionId: string) => {
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
     }
+
     if (result.user_received_pair_1 < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
       errorMessages.push("Out of slippage");
 
@@ -270,6 +269,7 @@ export const poolTransaction = async (transactionId: string) => {
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity - result.user_received_pair_1);
     }
   }
+
   return {
     errorMessages,
     method,

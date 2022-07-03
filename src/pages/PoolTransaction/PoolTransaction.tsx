@@ -71,12 +71,21 @@ export const PoolTransaction = () => {
             Go To Commitment Output Page
           </Button>
           <Divider className="pool-generator-tool-divider" />
+          <h6>Method</h6>
+          <InputGroup>
+            <Input value={result.method} disabled />
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Method has been copied to clipboard!</Tooltip>}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.method || "")}>
+                <CopyIcon width="1rem" height="1rem" />
+              </InputGroup.Button>
+            </Whisper>
+          </InputGroup>
           {result.errorMessages !== [] &&
             result.errorMessages.map((message: string) => {
               return <h5 className="redText">{message}</h5>;
             })}
           <Divider />
-          <h5>Pool Pair 1 Liquidity</h5>
+          <h6>Pool Pair 1 Liquidity</h6>
           <InputGroup>
             <Input value={result.pool_pair_1_liquidity} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>Pool Pair 1 Liquidity has been copied to clipboard!</Tooltip>}>
@@ -85,7 +94,6 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-          <Divider />
           <h6>Pool Pair 2 Liquidity</h6>
           <InputGroup>
             <Input value={result.pool_pair_2_liquidity} disabled />
