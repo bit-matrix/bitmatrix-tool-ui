@@ -33,8 +33,6 @@ export const PoolTransaction = () => {
       pair_1_pool_supply: cof.pair_1_pool_supply,
       pair_2_pool_supply: cof.pair_2_pool_supply,
       calculations: cof.result,
-      lp_liquidty: cof.lp_liquidty,
-      new_lp_liquidty: cof.new_lp_liquidty,
     });
 
     setLoad(false);
@@ -90,9 +88,9 @@ export const PoolTransaction = () => {
           </InputGroup>
           <h6>LP Liquidity</h6>
           <InputGroup>
-            <Input value={result.lp_liquidty} disabled />
+            <Input value={result.calculations.pool_lp_supply} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>LP Liquidity has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.lp_liquidty || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.pool_lp_supply || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
@@ -358,9 +356,9 @@ export const PoolTransaction = () => {
           </InputGroup>
           <h6>New LP Liquidity</h6>
           <InputGroup>
-            <Input value={result.new_lp_liquidty} disabled />
+            <Input value={result.calculations.new_pool_lp_liquidity} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>New LP Liquidity has been copied to clipboard!</Tooltip>}>
-              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.new_lp_liquidty || "")}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.new_pool_lp_liquidity || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>

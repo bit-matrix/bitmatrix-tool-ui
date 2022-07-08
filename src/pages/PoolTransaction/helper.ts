@@ -77,7 +77,8 @@ export const poolTransaction = async (transactionId: string) => {
     new_pair_2_pool_liquidity_apx_2: 0,
     user_received_pair_2_apx: 0,
     user_received_pair_2: 0,
-    pool_lp_supply: 0,
+    pool_lp_supply: Number(poolData.lp.value),
+    new_pool_lp_liquidity: Number(poolData.lp.value),
     lp_circulation: 0,
     user_lp_received: 0,
     user_lp_apx_1: 0,
@@ -110,12 +111,6 @@ export const poolTransaction = async (transactionId: string) => {
 
   // commitment Output2 Asset Id
   const commitmentOutput2AssetId = commitmentOutput2.asset;
-
-  //commitment output 3
-  const commitmentOutput3 = commitmentOutputs[3];
-
-  // commitment Output2 Asset Id
-  const commitmentOutput3AssetId = commitmentOutput3.asset;
 
   //pool detail rocks db den geldiği için asset, yeni pool modelde assetHash olacak
   const pair_1_asset_id = poolData.quote.asset;
@@ -291,8 +286,11 @@ export const poolTransaction = async (transactionId: string) => {
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity - result.user_received_pair_1);
     }
   } else if (method === "03") {
-    // 3- Havuzun güncel LP supply miktarına pool_lp_supply ismini ver.
-    result.pool_lp_supply = Number(poolData.lp.value);
+    //commitment output 3
+    const commitmentOutput3 = commitmentOutputs[3];
+
+    // commitment Output2 Asset Id
+    const commitmentOutput3AssetId = commitmentOutput3.asset;
 
     // 4- 2000000000 değerinden pool_lp_supply değerini çıkar ve sonuca lp_circulation ismini ver.
     result.lp_circulation = Math.floor(2000000000 - result.pool_lp_supply);
@@ -310,12 +308,11 @@ export const poolTransaction = async (transactionId: string) => {
     result.user_pair_2_supply_total = new Decimal(commitmentOutput3.value).mul(100000000).toNumber();
 
     // 9-user_pair_1_supply_total değerini pair_1_coefficient ’a böl ve sonuca user_pair_1_supply_total_downgraded ismini ver
-    const user_pair_1_supply_total_downgraded = Math.floor(result.user_pair_1_supply_total / pair_1_coefficient);
 
-    console.log({ result });
+    result.user_pair_1_supply_total_downgraded = Math.floor(result.user_pair_1_supply_total / pair_1_coefficient);
 
     // 10-user_pair_1_supply_total_downgraded ile pool_lp_supply değerini çarp ve sonuca mul_1 ismini ver.
-    result.mul_1 = Math.floor(user_pair_1_supply_total_downgraded * result.pool_lp_supply);
+    result.mul_1 = Math.floor(result.user_pair_1_supply_total_downgraded * result.pool_lp_supply);
 
     // 12-mul_1 değerini pool_pair_1_liquidity_downgraded değerine böl ve sonuca user_lp_apx_1 ismini ver
     result.user_lp_apx_1 = Math.floor(result.mul_1 / pool_pair_1_liquidity_downgraded);
@@ -339,6 +336,7 @@ export const poolTransaction = async (transactionId: string) => {
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
     }
+
     if (result.user_lp_received < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
       errorMessages.push("Out of slippage");
       // İlgili slot için 2 tane settlement output oluştur. Birinci outputun asset ID ‘sini pair_1_asset id olarak, ikinci outputun asset ID’sini ise ise pair_1_asset ID olarak ayarla.
@@ -365,6 +363,7 @@ export const poolTransaction = async (transactionId: string) => {
       output.value = result.user_lp_received;
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + result.user_pair_1_supply_total);
       result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity + result.user_pair_2_supply_total);
+      result.new_pool_lp_liquidity = Math.floor(result.pool_lp_supply - result.user_lp_received);
     }
   }
 
@@ -383,8 +382,6 @@ export const poolTransaction = async (transactionId: string) => {
     pool_pair_1_liquidity_downgraded,
     pool_pair_2_liquidity_downgraded,
     pool_constant,
-    lp_liquidty: poolData.lp.value,
-    new_lp_liquidty: poolData.lp.value,
     result,
   };
 };
