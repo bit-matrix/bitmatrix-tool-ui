@@ -321,8 +321,9 @@ export const poolTransaction = async (transactionId: string) => {
     // 13-user_pair_2_supply_total değerini pair_2_coefficient ’a böl ve sonuca user_pair_2_supply_total_downgraded ismini ver.
     result.user_pair_2_supply_total_downgraded = Math.floor(result.user_pair_2_supply_total / pair_2_coefficient);
 
-    // 14-user_pair_2_supply_total_downgraded ile pool_lp_supply değerini çarp ve sonuca mul_2 ismini ver.
-    result.mul_2 = Math.floor(result.user_pair_2_supply_total_downgraded * result.pool_lp_supply);
+    // 14-user_pair_2_supply_total_downgraded ile lp_circulation değerini çarp ve sonuca mul_2 ismini ver.
+
+    result.mul_2 = Math.floor(result.user_pair_2_supply_total_downgraded * result.lp_circulation);
 
     // 16-mul_2 değerini pool_pair_2_liquidity_downgraded değerine böl ve sonuca user_lp_apx_2 ismini ver.
     result.user_lp_apx_2 = Math.floor(result.mul_2 / pool_pair_2_liquidity_downgraded);
@@ -332,8 +333,10 @@ export const poolTransaction = async (transactionId: string) => {
 
     if (result.user_lp_received < 1) {
       errorMessages.push("Dust LP payout");
-      output.assetId = pair_2_asset_id;
-      output.value = result.user_supply_total;
+      case3outputs.output1.assetId = pair_1_asset_id;
+      case3outputs.output1.value = result.user_pair_1_supply_total;
+      case3outputs.output2.assetId = pair_2_asset_id;
+      case3outputs.output2.value = result.user_pair_2_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
     }
@@ -348,7 +351,7 @@ export const poolTransaction = async (transactionId: string) => {
 
       case3outputs.output1.assetId = pair_1_asset_id;
       case3outputs.output1.value = result.user_pair_1_supply_total;
-      case3outputs.output2.assetId = pair_1_asset_id;
+      case3outputs.output2.assetId = pair_2_asset_id;
       case3outputs.output2.value = result.user_pair_2_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
