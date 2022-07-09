@@ -312,7 +312,8 @@ export const poolTransaction = async (transactionId: string) => {
     result.user_pair_1_supply_total_downgraded = Math.floor(result.user_pair_1_supply_total / pair_1_coefficient);
 
     // 10-user_pair_1_supply_total_downgraded ile pool_lp_supply değerini çarp ve sonuca mul_1 ismini ver.
-    result.mul_1 = Math.floor(result.user_pair_1_supply_total_downgraded * result.pool_lp_supply);
+    //fix:user_pair_1_supply_total_downgraded ile lp_circulation değerini çarp ve sonuca mul_1 ismini ver.
+    result.mul_1 = Math.floor(result.user_pair_1_supply_total_downgraded * result.lp_circulation);
 
     // 12-mul_1 değerini pool_pair_1_liquidity_downgraded değerine böl ve sonuca user_lp_apx_1 ismini ver
     result.user_lp_apx_1 = Math.floor(result.mul_1 / pool_pair_1_liquidity_downgraded);
