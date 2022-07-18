@@ -8,6 +8,7 @@ import { LdkTool2 } from "./pages/LdkTool2/LdkTool2";
 import { PoolGenerateTool } from "./pages/PoolGenerateTool/PoolGenerateTool";
 import { PoolTransaction } from "./pages/PoolTransaction/PoolTransaction";
 import "./App.css";
+import { Aggreagator } from "./pages/Aggregator/Aggregator";
 
 const App = (): JSX.Element => {
   return (
@@ -20,6 +21,7 @@ const App = (): JSX.Element => {
           <Nav.Item href="/commitmentoutput">Commitment Output</Nav.Item>
           <Nav.Item href="/commitmentoutputtopool">Commitment Output To Pool</Nav.Item>
           <Nav.Item href="/pooltransaction">Pool Transaction</Nav.Item>
+          <Nav.Item href="/aggregator">Aggreagator</Nav.Item>
         </Nav>
       </Navbar>
       <Routes>
@@ -29,6 +31,7 @@ const App = (): JSX.Element => {
         <Route path="/commitmentoutput" element={<CommitmentOutputTool />} />
         <Route path="/commitmentoutputtopool" element={<CommitmentOutputToPoolTool />} />
         <Route path="/pooltransaction" element={<PoolTransaction />} />
+        <Route path="/aggregator" element={<Aggreagator />} />
       </Routes>
     </BrowserRouter>
   );

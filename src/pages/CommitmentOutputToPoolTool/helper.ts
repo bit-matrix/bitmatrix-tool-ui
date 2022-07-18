@@ -221,5 +221,8 @@ export const commitmentTxOutputsFragmentation = async (txId: string) => {
     publicKey,
     slippageTolerance,
     orderingFee,
+    cmtOutput1,
+    cmtOutput2,
+    cmtOutput3,
   };
 };
