@@ -115,6 +115,7 @@ export const poolTransaction = async (transactionId: string) => {
   //pool detail rocks db den geldiği için asset, yeni pool modelde assetHash olacak
   const pair_1_asset_id = poolData.quote.asset;
   const pair_2_asset_id = poolData.token.asset;
+  const lp_asset_id = poolData.lp.asset;
 
   const pair_1_pool_supply = Number(poolData.quote.value);
 
@@ -387,5 +388,7 @@ export const poolTransaction = async (transactionId: string) => {
     pool_pair_2_liquidity_downgraded,
     pool_constant,
     result,
+    ...cof,
+    lp_asset_id,
   };
 };
