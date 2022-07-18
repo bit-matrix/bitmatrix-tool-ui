@@ -42,6 +42,7 @@ export const poolData = {
   },
   lastSentPtx: "e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0",
   active: true,
+  leafCount: 1,
 };
 
 export const poolTransaction = async (transactionId: string) => {
@@ -390,5 +391,6 @@ export const poolTransaction = async (transactionId: string) => {
     result,
     ...cof,
     lp_asset_id,
+    leafCount: poolData.leafCount,
   };
 };

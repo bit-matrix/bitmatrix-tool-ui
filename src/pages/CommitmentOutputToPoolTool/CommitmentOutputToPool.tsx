@@ -81,13 +81,13 @@ export const CommitmentOutputToPoolTool = () => {
           <Divider />
 
           <h5>Commitment Tx Inputs Outpoints</h5>
-          {result.cmtTxInOutpoints.map((cmtTxInOutpoint: any, key: number) => {
+          {result.cmtTxInOutpoints.map((cmtTxInOutpoint: any) => {
             return (
-              <div key={key}>
+              <div key={cmtTxInOutpoint.index}>
                 <InputGroup>
-                  <Input value={cmtTxInOutpoint} disabled />
+                  <Input value={cmtTxInOutpoint.data} disabled />
                   <Whisper placement="top" trigger="click" speaker={<Tooltip>Commitment Tx Input Outpoint has been copied to clipboard!</Tooltip>}>
-                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(cmtTxInOutpoint || "")}>
+                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(cmtTxInOutpoint.data || "")}>
                       <CopyIcon width="1rem" height="1rem" />
                     </InputGroup.Button>
                   </Whisper>

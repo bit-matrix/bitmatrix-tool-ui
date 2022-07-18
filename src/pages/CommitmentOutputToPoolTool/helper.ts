@@ -67,9 +67,9 @@ export const commitmentTxOutputsFragmentation = async (txId: string) => {
   //cmt txin locktime’ı 4_bytes return
   const cmtTxLocktimeByteLength: string = convertion.numToLE32(WizData.fromNumber(decodedTransaction.locktime)).hex;
 
-  const cmtTxInOutpoints: Array<string> = inputs.map((inp) => {
+  const cmtTxInOutpoints = inputs.map((inp, index) => {
     const vout32Byte = convertion.numToLE32(WizData.fromNumber(inp.vout));
-    return hexLE(inp.txid) + vout32Byte.hex;
+    return { index, data: hexLE(inp.txid) + vout32Byte.hex };
   });
 
   const nSequences = inputs.map((inp) => inp.sequence);
