@@ -4,8 +4,6 @@ import { poolTransaction } from "../PoolTransaction/helper";
 import { convertion, taproot, TAPROOT_VERSION, utils } from "@script-wiz/lib-core";
 import { commitmentOutput, pool } from "@bitmatrix/lib";
 
-const lbtcAssetId = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
-
 export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e4eca9ec53fb3552c5ee0b06d153") => {
   const {
     cmtOutput1,
@@ -30,6 +28,8 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     methodCall,
     cmtTxInOutpoints,
     poolData,
+    output,
+    case3outputs,
   } = await poolTransaction(txId);
 
   // ------------- INPUTS START -------------
@@ -69,7 +69,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
   const lpHolderCovenantScriptPubkey = tokenCovenantScriptPubkey;
   const poolMainCovenantScriptPubkey = poolMainCovenant.taprootResult.scriptPubkey.hex;
 
-  const output1 = "01" + hexLE(lbtcAssetId) + "01" + "0000000000000001" + "00" + utils.compactSizeVarInt(flagCovenantScriptPubkey) + flagCovenantScriptPubkey;
+  const output1 = "01" + hexLE(poolId) + "01" + "0000000000000001" + "00" + utils.compactSizeVarInt(flagCovenantScriptPubkey) + flagCovenantScriptPubkey;
   const output2 =
     "01" +
     hexLE(pair_2_asset_id) +
@@ -94,6 +94,38 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     "00" +
     utils.compactSizeVarInt(poolMainCovenantScriptPubkey) +
     poolMainCovenantScriptPubkey;
+
+  let settlementOutputs = "";
+
+  if (case3outputs.output1.value !== 0) {
+    settlementOutputs +=
+      "01" +
+      hexLE(case3outputs.output1.assetId) +
+      "01" +
+      convertion.numToLE64LE(WizData.fromNumber(case3outputs.output1.value)).hex +
+      "00" +
+      utils.compactSizeVarInt(poolMainCovenantScriptPubkey) +
+      utils.publicKeyToScriptPubkey(publicKey);
+
+    settlementOutputs +=
+      "01" +
+      hexLE(case3outputs.output2.assetId) +
+      "01" +
+      convertion.numToLE64LE(WizData.fromNumber(case3outputs.output2.value)).hex +
+      "00" +
+      utils.compactSizeVarInt(poolMainCovenantScriptPubkey) +
+      utils.publicKeyToScriptPubkey(publicKey);
+  } else {
+    settlementOutputs +=
+      "01" +
+      hexLE(output.assetId) +
+      "01" +
+      convertion.numToLE64LE(WizData.fromNumber(output.value)).hex +
+      "00" +
+      utils.compactSizeVarInt(poolMainCovenantScriptPubkey) +
+      utils.publicKeyToScriptPubkey(publicKey);
+  }
+
   // temp
   const serviceFeeOutput = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401" + "00000000000001f4" + "00160014156e0dc932770529a4946433c500611b9ba77871";
 
@@ -101,7 +133,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
 
   const locktime = "00000000";
 
-  const outputTemplate = "06" + output1 + output2 + output3 + output4 + serviceFeeOutput + txFeeOutput + locktime;
+  const outputTemplate = "06" + output1 + output2 + output3 + output4 + settlementOutputs + serviceFeeOutput + txFeeOutput + locktime;
 
   console.log(outputTemplate);
 

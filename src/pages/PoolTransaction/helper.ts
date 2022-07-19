@@ -396,5 +396,6 @@ export const poolTransaction = async (transactionId: string) => {
     leafCount: poolData.leafCount,
     poolData,
     output,
+    case3outputs,
   };
 };
