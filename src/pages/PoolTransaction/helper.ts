@@ -57,8 +57,8 @@ export const poolTransaction = async (transactionId: string) => {
   };
 
   let case3outputs = {
-    output1: output,
-    output2: output,
+    output1: { ...output },
+    output2: { ...output },
   };
 
   const result: CTXPTXResult = {
@@ -339,6 +339,7 @@ export const poolTransaction = async (transactionId: string) => {
       case3outputs.output1.value = result.user_pair_1_supply_total;
       case3outputs.output2.assetId = pair_2_asset_id;
       case3outputs.output2.value = result.user_pair_2_supply_total;
+
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
     }
@@ -355,6 +356,7 @@ export const poolTransaction = async (transactionId: string) => {
       case3outputs.output1.value = result.user_pair_1_supply_total;
       case3outputs.output2.assetId = pair_2_asset_id;
       case3outputs.output2.value = result.user_pair_2_supply_total;
+
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
     }
@@ -393,5 +395,6 @@ export const poolTransaction = async (transactionId: string) => {
     lp_asset_id,
     leafCount: poolData.leafCount,
     poolData,
+    output,
   };
 };
