@@ -11,7 +11,6 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     cmtOutput1,
     cmtOutput2,
     cmtOutput3,
-    inputCount,
     outputCount,
     publicKey,
     poolId,
@@ -30,20 +29,27 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     slippageTolerance,
     methodCall,
     cmtTxInOutpoints,
+    poolData,
   } = await poolTransaction(txId);
 
   // ------------- INPUTS START -------------
+  const inputCount = methodCall === "03" ? WizData.fromNumber(7) : WizData.fromNumber(6);
   const version = "02000000";
   const const1 = "01";
 
-  const input1 = txId + convertion.convert32(WizData.fromNumber(cmtOutput1.n)).hex + "00" + "01000000";
-  const input2 = txId + convertion.convert32(WizData.fromNumber(cmtOutput2.n)).hex + "00" + "01000000";
+  const input1 = hexLE(poolData.unspentTx.txid) + convertion.convert32(WizData.fromNumber(0)).hex + "00" + "01000000";
+  const input2 = hexLE(poolData.unspentTx.txid) + convertion.convert32(WizData.fromNumber(1)).hex + "00" + "01000000";
+  const input3 = hexLE(poolData.unspentTx.txid) + convertion.convert32(WizData.fromNumber(2)).hex + "00" + "01000000";
+  const input4 = hexLE(poolData.unspentTx.txid) + convertion.convert32(WizData.fromNumber(3)).hex + "00" + "01000000";
 
-  let inputs = input1 + input2;
+  const input5 = hexLE(txId) + convertion.convert32(WizData.fromNumber(cmtOutput1.n)).hex + "00" + "01000000";
+  const input6 = hexLE(txId) + convertion.convert32(WizData.fromNumber(cmtOutput2.n)).hex + "00" + "01000000";
+
+  let inputs = input1 + input2 + input3 + input4 + input5 + input6;
 
   if (cmtOutput3) {
-    const input3 = txId + convertion.convert32(WizData.fromNumber(cmtOutput3.n)).hex + "00" + "01000000";
-    inputs = inputs + input3;
+    const input7 = hexLE(txId) + convertion.convert32(WizData.fromNumber(cmtOutput3.n)).hex + "00" + "01000000";
+    inputs = inputs + input7;
   }
 
   const inputTemplate = version + const1 + inputCount.hex + inputs;
@@ -88,7 +94,6 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     "00" +
     utils.compactSizeVarInt(poolMainCovenantScriptPubkey) +
     poolMainCovenantScriptPubkey;
-
   // temp
   const serviceFeeOutput = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401" + "00000000000001f4" + "00160014156e0dc932770529a4946433c500611b9ba77871";
 
@@ -97,6 +102,8 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
   const locktime = "00000000";
 
   const outputTemplate = "06" + output1 + output2 + output3 + output4 + serviceFeeOutput + txFeeOutput + locktime;
+
+  console.log(outputTemplate);
 
   // ------------- OUTPUTS END -------------
 
@@ -108,16 +115,16 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
   const flagCovenantControlBlockLength = "21";
   const flagCovenantControlBlock = "c41dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624";
 
-  const tokenCovenantWitness = "000002";
+  const tokenCovenantWitness = "00000002";
 
   const tokenCovenantScript = "20" + hexLE(poolId) + "00c86987";
   const tokenCovenantScriptLength = utils.compactSizeVarInt(tokenCovenantScript);
 
   // @todo index temp
   const tokenCovenantControlBlock = taproot.controlBlockCalculation(script, "c4", pubkey.hex, 0);
-  const tokenCovenantControlBlockLength = utils.compactSizeVarInt(tokenCovenantScript);
+  const tokenCovenantControlBlockLength = utils.compactSizeVarInt(tokenCovenantControlBlock);
 
-  const lpCovenantWitness = "000002";
+  const lpCovenantWitness = "00000002";
   const lpCovenantScript = tokenCovenantScript;
   const lpCovenantScriptLength = tokenCovenantScriptLength;
   const lpCovenantControlBlockLength = tokenCovenantControlBlockLength;
@@ -186,10 +193,11 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
       tweakKeyPrefixLength +
       tapTweakedResultPrefix +
       locktimeLength +
+      locktime +
       txFeesLength +
       txFees +
-      commitmentOutputs +
       changeOutputs +
+      commitmentOutputs +
       orderingFeeDetails +
       slippageToleranceDetails +
       receipentPubkeyDetails +
@@ -247,6 +255,8 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     commitmentoutputtopoolData +
     commitmentWitnessFinal +
     "000000000000000000000000000000";
+
+  // console.log(outputTemplate);
 
   console.log(inputTemplate + outputTemplate + witnessTemplate);
 };

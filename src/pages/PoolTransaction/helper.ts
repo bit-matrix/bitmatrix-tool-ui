@@ -392,5 +392,6 @@ export const poolTransaction = async (transactionId: string) => {
     ...cof,
     lp_asset_id,
     leafCount: poolData.leafCount,
+    poolData,
   };
 };
