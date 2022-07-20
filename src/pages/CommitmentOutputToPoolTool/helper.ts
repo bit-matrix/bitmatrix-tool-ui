@@ -135,6 +135,7 @@ export const commitmentTxOutputsFragmentation = async (txId: string) => {
 
   if (cmtOutput2.asset === pair2Asset) output2PairValue = "01";
   if (cmtOutput2.asset === pair1Asset) output2PairValue = "03";
+  if (methodCall === "04") output2PairValue = "02";
 
   //   8. Commitment out 2 ’in taşıdığı asset değeri 8 byte LE olarak.
 

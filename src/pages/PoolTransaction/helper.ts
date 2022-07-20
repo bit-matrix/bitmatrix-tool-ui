@@ -56,8 +56,8 @@ export const poolTransaction = async (transactionId: string) => {
   };
 
   let case3outputs = {
-    output1: output,
-    output2: output,
+    output1: { ...output },
+    output2: { ...output },
   };
 
   const result: CTXPTXResult = {
