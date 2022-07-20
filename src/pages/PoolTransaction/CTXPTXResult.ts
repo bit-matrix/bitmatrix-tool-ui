@@ -15,6 +15,7 @@ export type CTXPTXResult = {
   user_received_pair_1?: number; ///method call 2
   new_pool_pair_1_liquidity: number;
   new_pool_pair_2_liquidity: number;
+  new_pool_lp_supply: number;
   pool_lp_supply: number;
   new_pool_lp_liquidity: number;
   lp_circulation: number;
