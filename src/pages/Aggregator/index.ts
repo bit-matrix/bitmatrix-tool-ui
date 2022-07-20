@@ -97,6 +97,9 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
 
   let settlementOutputs = "";
 
+  const scriptPubkey = utils.publicKeyToScriptPubkey(publicKey);
+
+
   if (case3outputs.output1.value !== 0) {
     settlementOutputs +=
       "01" +
@@ -104,8 +107,8 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
       "01" +
       convertion.numToLE64LE(WizData.fromNumber(case3outputs.output1.value)).hex +
       "00" +
-      utils.compactSizeVarInt(poolMainCovenantScriptPubkey) +
-      utils.publicKeyToScriptPubkey(publicKey);
+      utils.compactSizeVarInt(scriptPubkey) +
+      scriptPubkey;
 
     settlementOutputs +=
       "01" +
@@ -113,23 +116,24 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
       "01" +
       convertion.numToLE64LE(WizData.fromNumber(case3outputs.output2.value)).hex +
       "00" +
-      utils.compactSizeVarInt(poolMainCovenantScriptPubkey) +
-      utils.publicKeyToScriptPubkey(publicKey);
+      utils.compactSizeVarInt(scriptPubkey) +
+      scriptPubkey;
   } else {
     settlementOutputs +=
-      "01" +
-      hexLE(output.assetId) +
-      "01" +
-      convertion.numToLE64LE(WizData.fromNumber(output.value)).hex +
-      "00" +
-      utils.compactSizeVarInt(poolMainCovenantScriptPubkey) +
-      utils.publicKeyToScriptPubkey(publicKey);
+      "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "00" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
   }
 
-  // temp
-  const serviceFeeOutput = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401" + "00000000000001f4" + "00160014156e0dc932770529a4946433c500611b9ba77871";
+  // add ordering fee
+  const bandwith = 145 + 1;
 
-  const txFeeOutput = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401" + "00000000000001f4" + "0000";
+  const serviceFee = 555;
+
+  const serviceFeeOutput =
+    "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401" +
+    convertion.numToLE64LE(WizData.fromNumber(serviceFee)).hex +
+    "00160014156e0dc932770529a4946433c500611b9ba77871";
+
+  const txFeeOutput = "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401" + convertion.numToLE64LE(WizData.fromNumber(bandwith)).hex + "0000";
 
   const locktime = "00000000";
 
