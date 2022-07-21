@@ -140,66 +140,67 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-          {result.method !== "03" && (
-            <>
-              <h6>User Supply Total</h6>
-              <InputGroup>
-                <Input value={result.calculations.user_supply_total} disabled />
-                <Whisper placement="top" trigger="click" speaker={<Tooltip>User Supply Total has been copied to clipboard!</Tooltip>}>
-                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.user_supply_total || "")}>
-                    <CopyIcon width="1rem" height="1rem" />
-                  </InputGroup.Button>
-                </Whisper>
-              </InputGroup>
-              <h6>User Supply Lp Fees</h6>
-              <InputGroup>
-                <Input value={result.calculations.user_supply_lp_fees} disabled />
-                <Whisper placement="top" trigger="click" speaker={<Tooltip>User Supply Lp Fees has been copied to clipboard!</Tooltip>}>
-                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.user_supply_lp_fees || "")}>
-                    <CopyIcon width="1rem" height="1rem" />
-                  </InputGroup.Button>
-                </Whisper>
-              </InputGroup>
-              <h6>User Supply Available</h6>
-              <InputGroup>
-                <Input value={result.calculations.user_supply_available} disabled />
-                <Whisper placement="top" trigger="click" speaker={<Tooltip>User Supply Available has been copied to clipboard!</Tooltip>}>
-                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.user_supply_available || "")}>
-                    <CopyIcon width="1rem" height="1rem" />
-                  </InputGroup.Button>
-                </Whisper>
-              </InputGroup>
-              <h6>Constant Coefficient</h6>
-              <InputGroup>
-                <Input value={result.calculations.constant_coefficient} disabled />
-                <Whisper placement="top" trigger="click" speaker={<Tooltip>Constant Coefficient has been copied to clipboard!</Tooltip>}>
-                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.constant_coefficient || "")}>
-                    <CopyIcon width="1rem" height="1rem" />
-                  </InputGroup.Button>
-                </Whisper>
-              </InputGroup>
-              <Divider className="pool-generator-tool-divider" />
-              <h6>Constant Coefficient Downgraded</h6>
-              <InputGroup>
-                <Input value={result.calculations.constant_coefficient_downgraded} disabled />
-                <Whisper placement="top" trigger="click" speaker={<Tooltip>Constant Coefficient Downgraded has been copied to clipboard!</Tooltip>}>
-                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.constant_coefficient_downgraded || "")}>
-                    <CopyIcon width="1rem" height="1rem" />
-                  </InputGroup.Button>
-                </Whisper>
-              </InputGroup>
-              <Divider className="pool-generator-tool-divider" />
-              <h6>Payout additional fees</h6>
-              <InputGroup>
-                <Input value={result.calculations.payout_additional_fees} disabled />
-                <Whisper placement="top" trigger="click" speaker={<Tooltip>Payout additional fees has been copied to clipboard!</Tooltip>}>
-                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.payout_additional_fees || "")}>
-                    <CopyIcon width="1rem" height="1rem" />
-                  </InputGroup.Button>
-                </Whisper>
-              </InputGroup>
-            </>
-          )}
+          {result.method !== "03" ||
+            (result.method !== "04" && (
+              <>
+                <h6>User Supply Total</h6>
+                <InputGroup>
+                  <Input value={result.calculations.user_supply_total} disabled />
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>User Supply Total has been copied to clipboard!</Tooltip>}>
+                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.user_supply_total || "")}>
+                      <CopyIcon width="1rem" height="1rem" />
+                    </InputGroup.Button>
+                  </Whisper>
+                </InputGroup>
+                <h6>User Supply Lp Fees</h6>
+                <InputGroup>
+                  <Input value={result.calculations.user_supply_lp_fees} disabled />
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>User Supply Lp Fees has been copied to clipboard!</Tooltip>}>
+                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.user_supply_lp_fees || "")}>
+                      <CopyIcon width="1rem" height="1rem" />
+                    </InputGroup.Button>
+                  </Whisper>
+                </InputGroup>
+                <h6>User Supply Available</h6>
+                <InputGroup>
+                  <Input value={result.calculations.user_supply_available} disabled />
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>User Supply Available has been copied to clipboard!</Tooltip>}>
+                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.user_supply_available || "")}>
+                      <CopyIcon width="1rem" height="1rem" />
+                    </InputGroup.Button>
+                  </Whisper>
+                </InputGroup>
+                <h6>Constant Coefficient</h6>
+                <InputGroup>
+                  <Input value={result.calculations.constant_coefficient} disabled />
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Constant Coefficient has been copied to clipboard!</Tooltip>}>
+                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.constant_coefficient || "")}>
+                      <CopyIcon width="1rem" height="1rem" />
+                    </InputGroup.Button>
+                  </Whisper>
+                </InputGroup>
+                <Divider className="pool-generator-tool-divider" />
+                <h6>Constant Coefficient Downgraded</h6>
+                <InputGroup>
+                  <Input value={result.calculations.constant_coefficient_downgraded} disabled />
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Constant Coefficient Downgraded has been copied to clipboard!</Tooltip>}>
+                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.constant_coefficient_downgraded || "")}>
+                      <CopyIcon width="1rem" height="1rem" />
+                    </InputGroup.Button>
+                  </Whisper>
+                </InputGroup>
+                <Divider className="pool-generator-tool-divider" />
+                <h6>Payout additional fees</h6>
+                <InputGroup>
+                  <Input value={result.calculations.payout_additional_fees} disabled />
+                  <Whisper placement="top" trigger="click" speaker={<Tooltip>Payout additional fees has been copied to clipboard!</Tooltip>}>
+                    <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.payout_additional_fees || "")}>
+                      <CopyIcon width="1rem" height="1rem" />
+                    </InputGroup.Button>
+                  </Whisper>
+                </InputGroup>
+              </>
+            ))}
 
           <h6>Pair 1 Coefficient</h6>
           <InputGroup>
@@ -465,6 +466,77 @@ export const PoolTransaction = () => {
                   </InputGroup.Button>
                 </Whisper>
               </InputGroup>
+            </>
+          )}
+          {result.method === "04" && (
+            <>
+              <h6>User Lp Supply Total</h6>
+              <InputGroup>
+                <Input value={result.calculations.user_lp_supply_total} disabled />
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>User Lp Supply Total has been copied to clipboard!</Tooltip>}>
+                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.user_lp_supply_total || "")}>
+                    <CopyIcon width="1rem" height="1rem" />
+                  </InputGroup.Button>
+                </Whisper>
+              </InputGroup>
+              <Divider />
+              <h6>Div 1</h6>
+              <InputGroup>
+                <Input value={result.calculations.div_1} disabled />
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Div 1 has been copied to clipboard!</Tooltip>}>
+                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.div_1 || "")}>
+                    <CopyIcon width="1rem" height="1rem" />
+                  </InputGroup.Button>
+                </Whisper>
+              </InputGroup>
+              <h6>Div 2</h6>
+              <InputGroup>
+                <Input value={result.calculations.div_2} disabled />
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Div 2 has been copied to clipboard!</Tooltip>}>
+                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.div_2 || "")}>
+                    <CopyIcon width="1rem" height="1rem" />
+                  </InputGroup.Button>
+                </Whisper>
+              </InputGroup>
+              <Divider />
+              <h6>Pair 1 User Redeem</h6>
+              <InputGroup>
+                <Input value={result.calculations.pair_1_user_redeem} disabled />
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Pair 1 User Redeem has been copied to clipboard!</Tooltip>}>
+                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.pair_1_user_redeem || "")}>
+                    <CopyIcon width="1rem" height="1rem" />
+                  </InputGroup.Button>
+                </Whisper>
+              </InputGroup>
+              <h6>Pair 2 User Redeem</h6>
+              <InputGroup>
+                <Input value={result.calculations.pair_2_user_redeem} disabled />
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Pair 2 User Redeem has been copied to clipboard!</Tooltip>}>
+                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.pair_2_user_redeem || "")}>
+                    <CopyIcon width="1rem" height="1rem" />
+                  </InputGroup.Button>
+                </Whisper>
+              </InputGroup>
+              <Divider />
+              <h6>Pair 1 Min Redeem</h6>
+              <InputGroup>
+                <Input value={result.calculations.pair_1_min_redeem} disabled />
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Pair 1 Min Redeem has been copied to clipboard!</Tooltip>}>
+                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.pair_1_min_redeem || "")}>
+                    <CopyIcon width="1rem" height="1rem" />
+                  </InputGroup.Button>
+                </Whisper>
+              </InputGroup>
+              <h6>Pair 2 Min Redeem</h6>
+              <InputGroup>
+                <Input value={result.calculations.pair_2_min_redeem} disabled />
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>Pair 2 Min Redeem has been copied to clipboard!</Tooltip>}>
+                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.pair_2_min_redeem || "")}>
+                    <CopyIcon width="1rem" height="1rem" />
+                  </InputGroup.Button>
+                </Whisper>
+              </InputGroup>
+              <Divider />
             </>
           )}
         </>
