@@ -43,6 +43,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
   const input3 = hexLE(poolData.unspentTx.txid) + convertion.convert32(WizData.fromNumber(2)).hex + "00" + "01000000";
   const input4 = hexLE(poolData.unspentTx.txid) + convertion.convert32(WizData.fromNumber(3)).hex + "00" + "01000000";
 
+  // @todo for loop for waiting ctx
   const input5 = hexLE(txId) + convertion.convert32(WizData.fromNumber(cmtOutput1.n)).hex + "00" + "01000000";
   const input6 = hexLE(txId) + convertion.convert32(WizData.fromNumber(cmtOutput2.n)).hex + "00" + "01000000";
 
@@ -96,6 +97,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     utils.compactSizeVarInt(poolMainCovenantScriptPubkey) +
     poolMainCovenantScriptPubkey;
 
+  // @todo for loop for waiting ctx
   let settlementOutputs = "";
 
   const scriptPubkey = utils.publicKeyToScriptPubkey(publicKey);
@@ -138,8 +140,6 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
   const locktime = "00000000";
 
   const outputTemplate = "06" + output1 + output2 + output3 + output4 + settlementOutputs + serviceFeeOutput + txFeeOutput + locktime;
-
-  console.log(outputTemplate);
 
   // ------------- OUTPUTS END -------------
 
@@ -191,6 +191,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
         changeOutputs += utils.compactSizeVarInt(changeOutput.noncScpkey) + changeOutput.noncScpkey + utils.compactSizeVarInt(changeOutput.assetValue) + changeOutput.assetValue;
       });
     } else if (changeOutputFinal.length === 2) {
+      changeOutputs = "0000";
       changeOutputSorted.forEach((changeOutput) => {
         changeOutputs += utils.compactSizeVarInt(changeOutput.noncScpkey) + changeOutput.noncScpkey + utils.compactSizeVarInt(changeOutput.assetValue) + changeOutput.assetValue;
       });
@@ -200,7 +201,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
       const cmtData = "09" + cmtOutput3Value + "01" + "01" + "09" + cmtOutput2Value + "01" + WizData.fromNumber(cmtOutput2.n).hex + "09" + cmtOutput1Value;
       commitmentOutputs += cmtData;
     } else {
-      const cmtData = "00" + "00" + "09" + cmtOutput2Value + "01" + WizData.fromNumber(cmtOutput2.n).hex + "09" + cmtOutput1Value;
+      const cmtData = "09" + "00" + "00" + cmtOutput2Value + "01" + WizData.fromNumber(cmtOutput2.n).hex + "09" + cmtOutput1Value;
       commitmentOutputs += cmtData;
     }
 
@@ -253,7 +254,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     const poolCommitment = commitmentOutput.commitmentOutputTapscript(poolId, publicKey, isAddLiquidity);
 
     const commitmentOutputWitness =
-      "00000003" +
+      "00000002" +
       "0101" +
       utils.compactSizeVarInt(poolCommitment.commitmentOutput) +
       poolCommitment.commitmentOutput +
@@ -292,7 +293,5 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     commitmentWitnessFinal +
     "000000000000000000000000000000";
 
-  console.log(inputTemplate);
-
-  // console.log(inputTemplate + outputTemplate + witnessTemplate);
+  console.log(inputTemplate + outputTemplate + witnessTemplate);
 };
