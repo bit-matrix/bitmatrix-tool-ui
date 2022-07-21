@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-concat */
 import WizData, { hexLE } from "@script-wiz/wiz-data";
 
 import { poolTransaction } from "../PoolTransaction/helper";
@@ -99,7 +100,6 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
 
   const scriptPubkey = utils.publicKeyToScriptPubkey(publicKey);
 
-
   if (case3outputs.output1.value !== 0) {
     settlementOutputs +=
       "01" +
@@ -120,7 +120,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
       scriptPubkey;
   } else {
     settlementOutputs +=
-      "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "00" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
+      "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "1600" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
   }
 
   // add ordering fee
@@ -292,7 +292,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     commitmentWitnessFinal +
     "000000000000000000000000000000";
 
-  // console.log(outputTemplate);
+  console.log(inputTemplate);
 
-  console.log(inputTemplate + outputTemplate + witnessTemplate);
+  // console.log(inputTemplate + outputTemplate + witnessTemplate);
 };
