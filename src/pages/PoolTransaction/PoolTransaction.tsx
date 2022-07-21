@@ -310,7 +310,7 @@ export const PoolTransaction = () => {
             </>
           )}
 
-          {result.mathod === "01" && (
+          {result.method === "01" && (
             <>
               <h6>User received pair 2</h6>
               <InputGroup>
@@ -354,7 +354,7 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-          <h6>New LP Liquidity</h6>
+          {/* <h6>New LP Liquidity</h6>
           <InputGroup>
             <Input value={result.calculations.new_pool_lp_liquidity} disabled />
             <Whisper placement="top" trigger="click" speaker={<Tooltip>New LP Liquidity has been copied to clipboard!</Tooltip>}>
@@ -362,15 +362,24 @@ export const PoolTransaction = () => {
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
             </Whisper>
-          </InputGroup>
+          </InputGroup> */}
 
           {result.method === "03" && (
             <>
-              <h6>Pool Lp Supply</h6>
+              <h6>Old Pool Lp Supply</h6>
               <InputGroup>
                 <Input value={result.calculations.pool_lp_supply} disabled />
                 <Whisper placement="top" trigger="click" speaker={<Tooltip>Pool Lp Supply has been copied to clipboard!</Tooltip>}>
                   <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.pool_lp_supply || "")}>
+                    <CopyIcon width="1rem" height="1rem" />
+                  </InputGroup.Button>
+                </Whisper>
+              </InputGroup>
+              <h6>New Pool Lp Supply</h6>
+              <InputGroup>
+                <Input value={result.calculations.new_pool_lp_supply} disabled />
+                <Whisper placement="top" trigger="click" speaker={<Tooltip>New Pool Lp Supply has been copied to clipboard!</Tooltip>}>
+                  <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.calculations.new_pool_lp_supply || "")}>
                     <CopyIcon width="1rem" height="1rem" />
                   </InputGroup.Button>
                 </Whisper>

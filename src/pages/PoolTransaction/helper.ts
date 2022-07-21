@@ -77,6 +77,7 @@ export const poolTransaction = async (transactionId: string) => {
     new_pair_2_pool_liquidity_apx_2: 0,
     user_received_pair_2_apx: 0,
     user_received_pair_2: 0,
+    new_pool_lp_supply: 0,
     pool_lp_supply: Number(poolData.lp.value),
     new_pool_lp_liquidity: Number(poolData.lp.value),
     lp_circulation: 0,
@@ -339,6 +340,7 @@ export const poolTransaction = async (transactionId: string) => {
       case3outputs.output2.value = result.user_pair_2_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+      result.new_pool_lp_supply = result.pool_lp_supply;
     }
 
     if (result.user_lp_received < (convertion.LE64ToNum(WizData.fromHex(cof.slippageTolerance))?.number || 0)) {
@@ -355,6 +357,7 @@ export const poolTransaction = async (transactionId: string) => {
       case3outputs.output2.value = result.user_pair_2_supply_total;
       result.new_pool_pair_1_liquidity = pool_pair_1_liquidity;
       result.new_pool_pair_2_liquidity = pool_pair_2_liquidity;
+      result.new_pool_lp_supply = result.pool_lp_supply;
     }
 
     if (errorMessages.length === 0) {
@@ -362,12 +365,14 @@ export const poolTransaction = async (transactionId: string) => {
       // İlgili slot için 1 tane settlement output oluştur. Bu outputun asset ID ‘sini LP asset id si olarak ayarla, miktarını da user_lp_received olarak ayarla.
       // pool_pair_1_liquidity değerine user_pair_1_supply_total değerine ekle ve sonuca new_pool_pair_1_liquidity ismini ver. Bu değeri havuzun güncel pair 1 liquidity miktarı olarak ata.
       // pool_pair_2_liquidity değerine user_pair_2_supply_total değerini ekle ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
+      // pool_lp_supply değerinden user_lp_received değerini çıkar ve sonuca new_pool_lp_supply ismini ver. Bu değeri havuzun güncel lp supply miktarı olarak ata.
 
       output.assetId = poolData.lp.asset;
       output.value = result.user_lp_received;
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + result.user_pair_1_supply_total);
       result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity + result.user_pair_2_supply_total);
-      result.new_pool_lp_liquidity = Math.floor(result.pool_lp_supply - result.user_lp_received);
+      // result.new_pool_lp_liquidity = Math.floor(result.pool_lp_supply - result.user_lp_received);
+      result.new_pool_lp_supply = Math.floor(result.pool_lp_supply - result.user_lp_received);
     }
   }
 
