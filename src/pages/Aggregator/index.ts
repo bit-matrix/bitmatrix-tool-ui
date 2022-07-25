@@ -142,7 +142,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
 
   const locktime = "00000000";
 
-  const outputTemplate = "06" + output1 + output2 + output3 + output4 + settlementOutputs + serviceFeeOutput + txFeeOutput + locktime;
+  const outputTemplate = methodCall === "03" ? "08" : "07" + output1 + output2 + output3 + output4 + settlementOutputs + serviceFeeOutput + txFeeOutput + locktime;
 
   // ------------- OUTPUTS END -------------
 
