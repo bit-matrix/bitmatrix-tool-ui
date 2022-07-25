@@ -33,6 +33,7 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     case3outputs,
     output2PairValue,
     inputCount,
+    cmtOutput3PairValue,
   } = await poolTransaction(txId);
 
   // ------------- INPUTS START -------------
@@ -200,10 +201,9 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
     }
 
     if (cmtOutput3) {
-      const cmtData = "09" + cmtOutput3Value + "01" + "01" + "09" + cmtOutput2Value + "01" + WizData.fromNumber(cmtOutput2.n).hex + "09" + cmtOutput1Value;
+      const cmtData = "09" + cmtOutput3Value + "01" + cmtOutput3PairValue + "09" + cmtOutput2Value + "01" + WizData.fromNumber(cmtOutput2.n).hex + "09" + cmtOutput1Value;
       commitmentOutputs += cmtData;
     } else {
-      console.log(output2PairValue);
       const cmtData = "00" + "00" + "09" + cmtOutput2Value + "01" + output2PairValue + "09" + cmtOutput1Value;
       commitmentOutputs += cmtData;
     }
