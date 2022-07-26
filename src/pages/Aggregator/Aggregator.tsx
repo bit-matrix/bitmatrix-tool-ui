@@ -1,3 +1,4 @@
+import { api } from "@bitmatrix/lib";
 import React from "react";
 import { Button, Divider, Input, InputGroup, Tooltip, Whisper } from "rsuite";
 import { createPoolTx } from ".";
@@ -6,6 +7,28 @@ import CopyIcon from "../../components/Svg/Icons/Copy";
 export const Aggreagator = () => {
   const [txId, setTxId] = React.useState<string>("");
   const [result, setResult] = React.useState<any>();
+  const [decodeResult, setDecodeResult] = React.useState<any>();
+  const [finalResult, setFinalResult] = React.useState<any>();
+
+  const decodeRawTx = async () => {
+    try {
+      const data = await api.decodeRawTransaction(result.rawTx);
+      setDecodeResult(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const broadcastRawTx = async () => {
+    try {
+      const data = await api.sendRawTransaction(result.rawTx);
+
+      setFinalResult(data);
+    } catch (e) {
+      console.log(e);
+      setFinalResult(e);
+    }
+  };
 
   const run = async () => {
     const res = await createPoolTx(txId);
@@ -67,6 +90,14 @@ export const Aggreagator = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
+
+          <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={decodeRawTx}>
+            Decode Raw TX
+          </Button>
+
+          <Button className="pool-generator-tool-calculate-button" appearance="primary" size="md" onClick={broadcastRawTx}>
+            Sent Raw TX
+          </Button>
         </div>
       )}
     </div>

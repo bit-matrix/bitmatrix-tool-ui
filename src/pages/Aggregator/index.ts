@@ -34,6 +34,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     output2PairValue,
     inputCount,
     cmtOutput3PairValue,
+    cmtOutputFeeHexValue,
   } = await poolTransaction(txId);
 
   // ------------- INPUTS START -------------
@@ -185,7 +186,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     const locktimeLength = "04";
     const txFeesLength = "09";
     // @todo calculate fees
-    const txFees = "0100000000000002c3";
+    const txFees = cmtOutputFeeHexValue;
     const changeOutputSorted = changeOutputFinal.sort((a, b) => b.index - a.index);
 
     let changeOutputs = "";
