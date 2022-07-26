@@ -128,12 +128,12 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
       "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "001600" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
   }
 
-  // add ordering fee
-  const bandwith = pool.bandwithArray[poolData.leafCount - 1] + 1;
+  const orderingFeeNumber = parseInt(hexLE(orderingFee), 16);
 
-  // console.log("xxxx", cmtOutput1Value - transactionFee);
+  const bandwith = pool.bandwithArray[poolData.leafCount - 1] + orderingFeeNumber;
+  const totalFee = cmtOutput1.value * 100000000;
 
-  const serviceFee = 517;
+  const serviceFee = totalFee - bandwith;
 
   const serviceFeeOutput =
     "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401" +
