@@ -5,7 +5,7 @@ import { poolTransaction } from "../PoolTransaction/helper";
 import { convertion, taproot, TAPROOT_VERSION, utils } from "@script-wiz/lib-core";
 import { commitmentOutput, pool } from "@bitmatrix/lib";
 
-export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e4eca9ec53fb3552c5ee0b06d153") => {
+export const createPoolTx = async (txId = "21cab16bec0b1134ba2d0fc77f358bd4601ee9a09c39f0beefdecbd2683a196d") => {
   const {
     cmtOutput1,
     cmtOutput2,
@@ -129,7 +129,9 @@ export const createPoolTx = async (txId = "c347a1fbe18c58cbcf8be6b56696e67d3186e
   }
 
   // add ordering fee
-  const bandwith = 145 + 1;
+  const bandwith = pool.bandwithArray[poolData.leafCount - 1] + 1;
+
+  console.log(bandwith);
 
   const serviceFee = 555;
 

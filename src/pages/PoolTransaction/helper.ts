@@ -5,29 +5,24 @@ import WizData from "@script-wiz/wiz-data";
 import { CTXPTXResult } from "./CTXPTXResult";
 
 export const poolData = {
-  id: "d3ffddaf4e61517bd0a538507d4164a8881edfd38329e0112338fd1894c2c0d1",
+  id: "2e27304eef17c3546eff8c8f85439802bd5a545da701b03f7838c8046a01da95",
   quote: {
     ticker: "tL-BTC",
     name: "Liquid Bitcoin",
     asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
-    value: "20000000",
+    value: "200000",
   },
   token: {
     ticker: "tL-USDt",
     name: "Liquid Tether",
     asset: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
-    value: "600000000000",
+    value: "100000000000",
   },
   lp: {
-    ticker: "5326",
+    ticker: "402b",
     name: "unknown",
-    asset: "53265881ac18ccc7b0c4e8c5b2238bf05163a7bb1a5a8d0152e32c83d9db035f",
-    value: "1999800000",
-  },
-  initialTx: {
-    txid: "e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0",
-    block_height: 379558,
-    block_hash: "8c11b11e9c59b3ea5819565630a9f19a350ea8eabea0bd975ae1d492ceb898b6",
+    asset: "402bb6d457ff10edb630ef80390f327b17dd02179a2ec04bb9259285f84f980d",
+    value: "1999998000",
   },
   lastSyncedBlock: {
     block_height: 381436,
@@ -35,12 +30,17 @@ export const poolData = {
   },
   bestBlockHeight: 385093,
   synced: false,
-  unspentTx: {
-    txid: "e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0",
-    block_height: 379558,
-    block_hash: "8c11b11e9c59b3ea5819565630a9f19a350ea8eabea0bd975ae1d492ceb898b6",
+  initialTx: {
+    txid: "3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f",
+    block_height: 445843,
+    block_hash: "d1ecce31620a28f34d37243e84327472bdb8de0a5dde451836c3b70ed03ce50c",
   },
-  lastSentPtx: "e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0",
+  unspentTx: {
+    txid: "3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f",
+    block_height: 445843,
+    block_hash: "d1ecce31620a28f34d37243e84327472bdb8de0a5dde451836c3b70ed03ce50c",
+  },
+  lastSentPtx: "3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f",
   active: true,
   leafCount: 1,
 };
