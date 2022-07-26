@@ -131,9 +131,9 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
   // add ordering fee
   const bandwith = pool.bandwithArray[poolData.leafCount - 1] + 1;
 
-  console.log(bandwith);
+  // console.log("xxxx", cmtOutput1Value - transactionFee);
 
-  const serviceFee = 555;
+  const serviceFee = 517;
 
   const serviceFeeOutput =
     "01499a818545f6bae39fc03b637f2a4e1e64e590cac1bc3a6f6d71aa4443654c1401" +
