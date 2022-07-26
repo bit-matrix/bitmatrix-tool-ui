@@ -7,8 +7,8 @@ export const Aggreagator = () => {
   const [txId, setTxId] = React.useState<string>("");
   const [result, setResult] = React.useState<any>();
 
-  const run = () => {
-    const res = createPoolTx(txId);
+  const run = async () => {
+    const res = await createPoolTx(txId);
     setResult(res);
   };
 
