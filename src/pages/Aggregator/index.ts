@@ -5,7 +5,7 @@ import { poolTransaction } from "../PoolTransaction/helper";
 import { convertion, taproot, TAPROOT_VERSION, utils } from "@script-wiz/lib-core";
 import { commitmentOutput, pool } from "@bitmatrix/lib";
 
-export const createPoolTx = async (txId = "21cab16bec0b1134ba2d0fc77f358bd4601ee9a09c39f0beefdecbd2683a196d") => {
+export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69846722d961e8a5cbd954954966c") => {
   const {
     cmtOutput1,
     cmtOutput2,

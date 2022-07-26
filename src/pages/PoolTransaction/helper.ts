@@ -37,6 +37,7 @@ export const poolData = {
   lastSentPtx: "a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae",
   active: true,
   leafCount: 1,
+  pair1_coefficient: 50,
 };
 
 export const poolTransaction = async (transactionId: string) => {
@@ -128,7 +129,7 @@ export const poolTransaction = async (transactionId: string) => {
 
   const pair_2_pool_supply = Number(poolData.token.value);
 
-  const pair_1_coefficient = 20;
+  const pair_1_coefficient = poolData.pair1_coefficient;
 
   const pair_2_coefficient = Math.floor(pair_2_pool_supply / pair_1_pool_supply) * pair_1_coefficient;
 
