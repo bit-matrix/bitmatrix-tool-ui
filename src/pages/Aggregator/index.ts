@@ -302,5 +302,5 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
   console.log("outputs:", outputTemplate);
   console.log("witness:", witnessTemplate);
 
-  return { inputTemplate, outputTemplate, witnessTemplate };
+  return { inputTemplate, outputTemplate, witnessTemplate, rawHex: inputTemplate + outputTemplate + witnessTemplate };
 };

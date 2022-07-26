@@ -49,7 +49,7 @@ export const Aggreagator = () => {
           <h6>Witness Template</h6>
           <InputGroup>
             <Input value={result.witnessTemplate} disabled />
-            <Whisper placement="top" trigger="click" speaker={<Tooltip>Inputs has been copied to clipboard!</Tooltip>}>
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Witness has been copied to clipboard!</Tooltip>}>
               <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.witnessTemplate || "")}>
                 <CopyIcon width="1rem" height="1rem" />
               </InputGroup.Button>
@@ -57,6 +57,16 @@ export const Aggreagator = () => {
           </InputGroup>
 
           <Divider className="pool-generator-tool-divider" />
+
+          <h6>RAW HEX</h6>
+          <InputGroup>
+            <Input value={result.rawHex} disabled />
+            <Whisper placement="top" trigger="click" speaker={<Tooltip>Raw hex has been copied to clipboard!</Tooltip>}>
+              <InputGroup.Button onClick={() => navigator.clipboard.writeText(result.rawHex || "")}>
+                <CopyIcon width="1rem" height="1rem" />
+              </InputGroup.Button>
+            </Whisper>
+          </InputGroup>
         </div>
       )}
     </div>
