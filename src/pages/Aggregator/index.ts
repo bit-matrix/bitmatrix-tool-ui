@@ -218,11 +218,10 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     const outputCountDetails = utils.compactSizeVarInt(outputCount.hex) + outputCount.hex;
 
     let outpoints = "";
-    const sortedOutpoints = cmtTxInOutpoints.sort((a, b) => b.index - a.index);
 
     for (let z = 11; z >= 0; z--) {
-      if (sortedOutpoints[z]) {
-        outpoints += utils.compactSizeVarInt(sortedOutpoints[z].data) + sortedOutpoints[z].data;
+      if (cmtTxInOutpoints[z]) {
+        outpoints += utils.compactSizeVarInt(cmtTxInOutpoints[z].data) + cmtTxInOutpoints[z].data;
       } else {
         outpoints += "00";
       }
