@@ -9,20 +9,20 @@ export const poolData = {
   quote: {
     ticker: "tL-BTC",
     name: "Liquid Bitcoin",
-    asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
+    assetHash: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
     value: "500000",
   },
   token: {
     ticker: "tL-USDt",
     name: "Liquid Tether",
-    asset: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
+    assetHash: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
     value: "50000000000",
   },
   lp: {
     ticker: "6507",
     name: "unknown",
-    asset: "650753ef49c11996173a89ddeee785f4830baf18a525f56ff93aa73ddc45820d",
-    value: "1999998280",
+    assetHash: "650753ef49c11996173a89ddeee785f4830baf18a525f56ff93aa73ddc45820d",
+    value: "1999998000",
   },
   lastSyncedBlock: {
     block_height: 381436,
@@ -127,9 +127,9 @@ export const poolTransaction = async (transactionId: string) => {
   const commitmentOutput2AssetId = commitmentOutput2.asset;
 
   //pool detail rocks db den geldiği için asset, yeni pool modelde assetHash olacak
-  const pair_1_asset_id = poolData.quote.asset;
-  const pair_2_asset_id = poolData.token.asset;
-  const lp_asset_id = poolData.lp.asset;
+  const pair_1_asset_id = poolData.quote.assetHash;
+  const pair_2_asset_id = poolData.token.assetHash;
+  const lp_asset_id = poolData.lp.assetHash;
 
   const pair_1_pool_supply = Number(poolData.quote.value);
 
