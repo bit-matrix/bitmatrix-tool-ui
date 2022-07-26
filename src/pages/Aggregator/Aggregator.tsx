@@ -12,7 +12,7 @@ export const Aggreagator = () => {
 
   const decodeRawTx = async () => {
     try {
-      const data = await api.decodeRawTransaction(result.rawTx);
+      const data = await api.decodeRawTransaction(result.rawHex);
       setDecodeResult(data);
     } catch (e) {
       console.log(e);
@@ -21,7 +21,7 @@ export const Aggreagator = () => {
 
   const broadcastRawTx = async () => {
     try {
-      const data = await api.sendRawTransaction(result.rawTx);
+      const data = await api.sendRawTransaction(result.rawHex);
 
       setFinalResult(data);
     } catch (e) {
