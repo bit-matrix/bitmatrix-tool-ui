@@ -192,7 +192,7 @@ export const poolTransaction = async (transactionId: string) => {
     // 16-user_received_pair_2_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_2 ismini ver.
     result.user_received_pair_2 = Math.floor(result.user_received_pair_2_apx - result.payout_additional_fees);
 
-    if (result.user_received_pair_2 < Math.floor(22 * pair_2_coefficient)) {
+    if (result.user_received_pair_2 < Math.floor(10 * pair_2_coefficient)) {
       errorMessages.push("Dust payout");
 
       output.assetId = pair_1_asset_id;
@@ -268,7 +268,7 @@ export const poolTransaction = async (transactionId: string) => {
     // 16- user_received_pair_1_apx değerinden payout_additional_fees değerini çıkar ve sonuca user_received_pair_1 ismini ver.
     result.user_received_pair_1 = Math.floor(result.user_received_pair_1_apx - result.payout_additional_fees);
 
-    if (result.user_received_pair_1 < Math.floor(22 * pair_1_coefficient)) {
+    if (result.user_received_pair_1 < Math.floor(10 * pair_1_coefficient)) {
       errorMessages.push("Dust payout");
 
       output.assetId = pair_2_asset_id;
@@ -420,9 +420,9 @@ export const poolTransaction = async (transactionId: string) => {
 
     // 22 ile pair_1_coefficient değerini çarp ve bu değere pair_1_min_redeem ismini ver.
 
-    result.pair_1_min_redeem = Math.floor(pair_1_coefficient * 22);
+    result.pair_1_min_redeem = Math.floor(pair_1_coefficient * 10);
     // 22 ile pair_2_coefficient değerini çarp ve bu değere pair_2_min_redeem ismini ver.
-    result.pair_2_min_redeem = Math.floor(pair_2_coefficient * 22);
+    result.pair_2_min_redeem = Math.floor(pair_2_coefficient * 10);
 
     // a. pair_1_user_redeem değeri pair_1_min_redeem değerinden küçük ise veya pair_2_user_redeem değeri pair_2_min_redeem değerinden küçük ise “revert” logic’ini çalıştır. Bu erroru “Dust LP payout” olarak etiketle.
     if (result.pair_1_user_redeem < result.pair_1_min_redeem || result.pair_2_user_redeem < result.pair_2_min_redeem) {
