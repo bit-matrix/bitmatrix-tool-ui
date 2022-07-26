@@ -5,42 +5,36 @@ import WizData from "@script-wiz/wiz-data";
 import { CTXPTXResult } from "./CTXPTXResult";
 
 export const poolData = {
-  id: "2e27304eef17c3546eff8c8f85439802bd5a545da701b03f7838c8046a01da95",
+  id: "e053e3bd52e7692f12fc8f61df6dc5e747a058f679bf1046ac96649d15e50d2c",
   quote: {
     ticker: "tL-BTC",
     name: "Liquid Bitcoin",
-    asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
-    value: "200000",
+    assetHash: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
+    value: "430000",
   },
   token: {
     ticker: "tL-USDt",
     name: "Liquid Tether",
-    asset: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
-    value: "100000000000",
+    assetHash: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
+    value: "50000000000",
   },
   lp: {
-    ticker: "402b",
+    ticker: "3a5d",
     name: "unknown",
-    asset: "402bb6d457ff10edb630ef80390f327b17dd02179a2ec04bb9259285f84f980d",
-    value: "1999998000",
+    assetHash: "3a5d580b7de1d3b0f7aa560495eb8ef5615e66db9c72939ad0d66753d6bb114c",
+    value: "1999998280",
   },
-  lastSyncedBlock: {
-    block_height: 381436,
-    block_hash: "44340f3f93fd21859b1f4a379d172c95b4214dfd6e639d5b7a9fc6d2b669e5e0",
-  },
-  bestBlockHeight: 385093,
-  synced: false,
   initialTx: {
-    txid: "3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f",
-    block_height: 445843,
-    block_hash: "d1ecce31620a28f34d37243e84327472bdb8de0a5dde451836c3b70ed03ce50c",
+    txid: "a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae",
+    block_height: 447086,
+    block_hash: "8199c248886ca066062136c883a80ccca106238cc6346b55edb9109d11cd7229",
   },
   unspentTx: {
-    txid: "3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f",
-    block_height: 445843,
-    block_hash: "d1ecce31620a28f34d37243e84327472bdb8de0a5dde451836c3b70ed03ce50c",
+    txid: "a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae",
+    block_height: 447086,
+    block_hash: "8199c248886ca066062136c883a80ccca106238cc6346b55edb9109d11cd7229",
   },
-  lastSentPtx: "3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f",
+  lastSentPtx: "a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae",
   active: true,
   leafCount: 1,
 };
@@ -126,9 +120,9 @@ export const poolTransaction = async (transactionId: string) => {
   const commitmentOutput2AssetId = commitmentOutput2.asset;
 
   //pool detail rocks db den geldiği için asset, yeni pool modelde assetHash olacak
-  const pair_1_asset_id = poolData.quote.asset;
-  const pair_2_asset_id = poolData.token.asset;
-  const lp_asset_id = poolData.lp.asset;
+  const pair_1_asset_id = poolData.quote.assetHash;
+  const pair_2_asset_id = poolData.token.assetHash;
+  const lp_asset_id = poolData.lp.assetHash;
 
   const pair_1_pool_supply = Number(poolData.quote.value);
 
@@ -382,7 +376,7 @@ export const poolTransaction = async (transactionId: string) => {
       // pool_pair_2_liquidity değerine user_pair_2_supply_total değerini ekle ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
       // pool_lp_supply değerinden user_lp_received değerini çıkar ve sonuca new_pool_lp_supply ismini ver. Bu değeri havuzun güncel lp supply miktarı olarak ata.
 
-      output.assetId = poolData.lp.asset;
+      output.assetId = poolData.lp.assetHash;
       output.value = result.user_lp_received;
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + result.user_pair_1_supply_total);
       result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity + result.user_pair_2_supply_total);
