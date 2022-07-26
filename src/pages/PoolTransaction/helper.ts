@@ -383,7 +383,7 @@ export const poolTransaction = async (transactionId: string) => {
       // pool_pair_2_liquidity değerine user_pair_2_supply_total değerini ekle ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
       // pool_lp_supply değerinden user_lp_received değerini çıkar ve sonuca new_pool_lp_supply ismini ver. Bu değeri havuzun güncel lp supply miktarı olarak ata.
 
-      output.assetId = poolData.lp.asset;
+      output.assetId = poolData.lp.assetHash;
       output.value = result.user_lp_received;
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + result.user_pair_1_supply_total);
       result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity + result.user_pair_2_supply_total);
