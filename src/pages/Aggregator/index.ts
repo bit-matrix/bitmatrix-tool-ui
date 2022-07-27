@@ -39,6 +39,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
 
   // ------------- INPUTS START -------------
   const inputCountForInput = methodCall === "03" ? WizData.fromNumber(7) : WizData.fromNumber(6);
+
   const version = "02000000";
   const const1 = "01";
 
@@ -301,9 +302,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     numberOfWitnessElements +
     commitmentoutputtopoolData +
     commitmentWitnessFinal +
-    "000000000000000000000000000000";
-
-  console.log("outputs:", outputTemplate);
+    "00".repeat((outputCount.number || 0) * 2 + 1);
 
   return { inputTemplate, outputTemplate, witnessTemplate, rawHex: inputTemplate + outputTemplate + witnessTemplate };
 };
