@@ -10,13 +10,13 @@ export const poolData = {
     ticker: "tL-BTC",
     name: "Liquid Bitcoin",
     assetHash: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
-    value: "200000",
+    value: "209442",
   },
   token: {
     ticker: "tL-USDt",
     name: "Liquid Tether",
     assetHash: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
-    value: "100000000000",
+    value: "95550000000",
   },
   lp: {
     ticker: "fc65",
@@ -30,11 +30,10 @@ export const poolData = {
     block_hash: "7fa6f90f1b8bfe5c9e5aeecda0441cc2814a9374c73ee9e22f8ed1ec6af4bc35",
   },
   unspentTx: {
-    txid: "0443c7e231f62d5e77f193d59d2dc1c28fadab0fb6f5f287b588b984398a5e4d",
-    block_height: 448447,
-    block_hash: "96090a6d263a686215dbfdf2c161a0d22ac0195cae0d4dc68ea24c2575d65191",
+    txid: "01e66d46ad9b2d41d9634b8bcf9fe31eca3b3f2b2af7b368c56034f4e4d490ed",
+    block_height: 448541,
+    block_hash: "d4102f4f10c1c8673bc8b335e0924338d8b5c3c908a77f5fa341ee76387d3c71",
   },
-  lastSentPtx: "e3094b74a3db4f83b472531d6564a3e94b956c661fe94296d4da22c7a8624415",
   leafCount: 1,
   pair1_coefficient: 50,
 };
