@@ -194,7 +194,12 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
 
     for (let t = 2; t >= 0; t--) {
       if (changeOutputSorted[t]) {
-        changeOutputs += utils.compactSizeVarInt(changeOutputSorted[t].noncScpkey) + changeOutputSorted[t].noncScpkey;
+        const currentChangeOutput = changeOutputSorted[t];
+        changeOutputs +=
+          utils.compactSizeVarInt(currentChangeOutput.noncScpkey) +
+          currentChangeOutput.noncScpkey +
+          utils.compactSizeVarInt(currentChangeOutput.assetValue) +
+          currentChangeOutput.assetValue;
       } else {
         changeOutputs += "0000";
       }
