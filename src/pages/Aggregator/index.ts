@@ -190,14 +190,14 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     const txFeesLength = "09";
     // @todo calculate fees
     const txFees = cmtOutputFeeHexValue;
-    const changeOutputSorted = changeOutputFinal.sort((a, b) => b.index - a.index);
+    // const changeOutputSorted = changeOutputFinal.sort((a, b) => b.index - a.index);
 
     let changeOutputs = "";
     let commitmentOutputs = "";
 
     for (let t = 2; t >= 0; t--) {
-      if (changeOutputSorted[t]) {
-        const currentChangeOutput = changeOutputSorted[t];
+      if (changeOutputFinal[t]) {
+        const currentChangeOutput = changeOutputFinal[t];
         changeOutputs +=
           utils.compactSizeVarInt(currentChangeOutput.noncScpkey) +
           currentChangeOutput.noncScpkey +
