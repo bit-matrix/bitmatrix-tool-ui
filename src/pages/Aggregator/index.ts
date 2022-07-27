@@ -115,7 +115,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
       hexLE(case3outputs.output1.assetId) +
       "01" +
       convertion.numToLE64LE(WizData.fromNumber(case3outputs.output1.value)).hex +
-      "00" +
+      "001600" +
       utils.compactSizeVarInt(scriptPubkey) +
       scriptPubkey;
 
@@ -124,7 +124,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
       hexLE(case3outputs.output2.assetId) +
       "01" +
       convertion.numToLE64LE(WizData.fromNumber(case3outputs.output2.value)).hex +
-      "00" +
+      "001600" +
       utils.compactSizeVarInt(scriptPubkey) +
       scriptPubkey;
   } else {
