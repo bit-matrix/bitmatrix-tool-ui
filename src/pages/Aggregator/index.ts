@@ -107,10 +107,10 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
 
   const scriptPubkey = utils.publicKeyToScriptPubkey(publicKey);
 
-  let outputTemplateCount = "07";
+  let outputTemplateCount = 7;
 
   if (case3outputs.output1.value !== 0) {
-    outputTemplateCount = "08";
+    outputTemplateCount = 8;
     settlementOutputs +=
       "01" +
       hexLE(case3outputs.output1.assetId) +
@@ -149,7 +149,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
 
   const locktime = "00000000";
 
-  const outputTemplate = outputTemplateCount + output1 + output2 + output3 + output4 + settlementOutputs + serviceFeeOutput + txFeeOutput + locktime;
+  const outputTemplate = WizData.fromNumber(outputTemplateCount).hex + output1 + output2 + output3 + output4 + settlementOutputs + serviceFeeOutput + txFeeOutput + locktime;
 
   // ------------- OUTPUTS END -------------
 
@@ -302,7 +302,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     numberOfWitnessElements +
     commitmentoutputtopoolData +
     commitmentWitnessFinal +
-    "00".repeat((outputCount.number || 0) * 2 + 1);
+    "00".repeat(outputTemplateCount * 2 + 1);
 
   return { inputTemplate, outputTemplate, witnessTemplate, rawHex: inputTemplate + outputTemplate + witnessTemplate };
 };
