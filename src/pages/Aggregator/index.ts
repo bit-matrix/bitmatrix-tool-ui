@@ -209,7 +209,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     }
 
     if (cmtOutput3) {
-      const cmtData = "09" + cmtOutput3Value + "01" + cmtOutput3PairValue + "09" + cmtOutput2Value + "01" + WizData.fromNumber(cmtOutput2.n).hex + "09" + cmtOutput1Value;
+      const cmtData = "09" + cmtOutput3Value + "01" + cmtOutput3PairValue + "09" + cmtOutput2Value + "01" + output2PairValue + "09" + cmtOutput1Value;
       commitmentOutputs += cmtData;
     } else {
       const cmtData = "00" + "00" + "09" + cmtOutput2Value + "01" + output2PairValue + "09" + cmtOutput1Value;
