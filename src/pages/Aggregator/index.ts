@@ -192,15 +192,12 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     let changeOutputs = "";
     let commitmentOutputs = "";
 
-    if (changeOutputFinal.length === 3) {
-      changeOutputSorted.forEach((changeOutput) => {
-        changeOutputs += utils.compactSizeVarInt(changeOutput.noncScpkey) + changeOutput.noncScpkey + utils.compactSizeVarInt(changeOutput.assetValue) + changeOutput.assetValue;
-      });
-    } else if (changeOutputFinal.length === 2) {
-      changeOutputs = "0000";
-      changeOutputSorted.forEach((changeOutput) => {
-        changeOutputs += utils.compactSizeVarInt(changeOutput.noncScpkey) + changeOutput.noncScpkey + utils.compactSizeVarInt(changeOutput.assetValue) + changeOutput.assetValue;
-      });
+    for (let t = 2; t >= 0; t--) {
+      if (changeOutputSorted[t]) {
+        changeOutputs += utils.compactSizeVarInt(changeOutputSorted[t].noncScpkey) + changeOutputSorted[t].noncScpkey;
+      } else {
+        changeOutputs += "0000";
+      }
     }
 
     if (cmtOutput3) {
