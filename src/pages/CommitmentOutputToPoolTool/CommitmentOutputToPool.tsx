@@ -1,8 +1,10 @@
+import { TxDetail } from "@bitmatrix/esplora-api-client";
+import { api, commitmentFinder } from "@bitmatrix/lib";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Divider, Input, InputGroup, Loader, Tooltip, Whisper } from "rsuite";
 import CopyIcon from "../../components/Svg/Icons/Copy";
-import { commitmentTxOutputsFragmentation } from "./helper";
+import { poolData } from "../PoolTransaction/helper";
 
 export const CommitmentOutputToPoolTool = () => {
   const [transactionId, setTransactionId] = useState<string>("");
@@ -13,33 +15,38 @@ export const CommitmentOutputToPoolTool = () => {
 
   const createCommitmentOutput = async () => {
     setLoad(true);
+    const rawTransactionHex: string = await api.getRawTransaction(transactionId);
+    const decodedTransaction: TxDetail = await api.decodeRawTransaction(rawTransactionHex);
 
-    const cof = await commitmentTxOutputsFragmentation(transactionId);
-    setResult({
-      cmtTxLocktimeByteLength: cof.cmtTxLocktimeByteLength,
-      inputs: cof.inputs,
-      nsequenceValue: cof.nsequenceValue,
-      inputCount: cof.inputCount.hex,
-      outputCount: cof.outputCount.hex,
-      cmtTxInOutpoints: cof.cmtTxInOutpoints,
-      poolId: cof.poolId,
-      methodCall: cof.methodCall,
-      publicKey: cof.publicKey,
-      slippageTolerance: cof.slippageTolerance,
-      orderingFee: cof.orderingFee,
-      tapTweakedResultPrefix: cof.tapTweakedResultPrefix,
-      cmtOutput1Value: cof.cmtOutput1Value,
-      output2PairValue: cof.output2PairValue,
-      cmtOutput2Value: cof.cmtOutput2Value,
-      cmtOutput3Value: cof.cmtOutput3Value,
-      cmtOutputFeeHexValue: cof.cmtOutputFeeHexValue,
-      cmtOutput3PairValue: cof.cmtOutput3PairValue,
-      cmtOutput3Asset: cof.cmtOutput3Asset || "",
-      changeOutputFinal: cof.changeOutputFinal,
-      seperatedChangeOutputs: cof.seperatedChangeOutputs,
-    });
+    const cof = await commitmentFinder(decodedTransaction, [poolData]);
 
-    setLoad(false);
+    if (cof) {
+      setResult({
+        cmtTxLocktimeByteLength: cof.cmtTxLocktimeByteLength,
+        inputs: cof.inputs,
+        nsequenceValue: cof.nsequenceValue,
+        inputCount: cof.inputCount.hex,
+        outputCount: cof.outputCount.hex,
+        cmtTxInOutpoints: cof.cmtTxInOutpoints,
+        poolId: cof.poolId,
+        methodCall: cof.methodCall,
+        publicKey: cof.publicKey,
+        slippageTolerance: cof.slippageTolerance,
+        orderingFee: cof.orderingFee,
+        tapTweakedResultPrefix: cof.tapTweakedResultPrefix,
+        cmtOutput1Value: cof.cmtOutput1Value,
+        output2PairValue: cof.output2PairValue,
+        cmtOutput2Value: cof.cmtOutput2Value,
+        cmtOutput3Value: cof.cmtOutput3Value,
+        cmtOutputFeeHexValue: cof.cmtOutputFeeHexValue,
+        cmtOutput3PairValue: cof.cmtOutput3PairValue,
+        cmtOutput3Asset: cof.cmtOutput3Asset || "",
+        changeOutputFinal: cof.changeOutputFinal,
+        seperatedChangeOutputs: cof.seperatedChangeOutputs,
+      });
+
+      setLoad(false);
+    }
   };
 
   return (

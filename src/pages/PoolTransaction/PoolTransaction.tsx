@@ -1,8 +1,10 @@
+import { TxDetail } from "@bitmatrix/esplora-api-client";
+import { api, commitmentFinder, validatePoolTx } from "@bitmatrix/lib";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Divider, Input, InputGroup, Loader, Tooltip, Whisper } from "rsuite";
 import CopyIcon from "../../components/Svg/Icons/Copy";
-import { poolTransaction } from "./helper";
+import { poolData } from "./helper";
 import "./poolTransaction.css";
 
 export const PoolTransaction = () => {
@@ -14,28 +16,32 @@ export const PoolTransaction = () => {
 
   const createCommitmentOutput = async () => {
     setLoad(true);
+    const rawTransactionHex: string = await api.getRawTransaction(transactionId);
+    const decodedTransaction: TxDetail = await api.decodeRawTransaction(rawTransactionHex);
 
-    const cof = await poolTransaction(transactionId);
+    const cmtResult = await commitmentFinder(decodedTransaction, [poolData]);
+    if (cmtResult) {
+      const cof = await validatePoolTx(cmtResult);
 
-    setResult({
-      errorMessages: cof.errorMessages,
-      method: cof.method,
-      pool_pair_1_liquidity: cof.pool_pair_1_liquidity,
-      pool_pair_2_liquidity: cof.pool_pair_2_liquidity,
-      commitmentOutput2AssetId: cof.commitmentOutput2AssetId,
-      pair_1_asset_id: cof.pair_1_asset_id,
-      pair_2_asset_id: cof.pair_2_asset_id,
-      pool_constant: cof.pool_constant,
-      pair_1_coefficient: cof.pair_1_coefficient,
-      pair_2_coefficient: cof.pair_2_coefficient,
-      pool_pair_1_liquidity_downgraded: cof.pool_pair_1_liquidity_downgraded,
-      pool_pair_2_liquidity_downgraded: cof.pool_pair_2_liquidity_downgraded,
-      pair_1_pool_supply: cof.pair_1_pool_supply,
-      pair_2_pool_supply: cof.pair_2_pool_supply,
-      calculations: cof.result,
-    });
+      setResult({
+        method: cof.method,
+        pool_pair_1_liquidity: cof.pool_pair_1_liquidity,
+        pool_pair_2_liquidity: cof.pool_pair_2_liquidity,
+        commitmentOutput2AssetId: cof.commitmentOutput2AssetId,
+        pair_1_asset_id: cof.pair_1_asset_id,
+        pair_2_asset_id: cof.pair_2_asset_id,
+        pool_constant: cof.pool_constant,
+        pair_1_coefficient: cof.pair_1_coefficient,
+        pair_2_coefficient: cof.pair_2_coefficient,
+        pool_pair_1_liquidity_downgraded: cof.pool_pair_1_liquidity_downgraded,
+        pool_pair_2_liquidity_downgraded: cof.pool_pair_2_liquidity_downgraded,
+        pair_1_pool_supply: cof.pair_1_pool_supply,
+        pair_2_pool_supply: cof.pair_2_pool_supply,
+        calculations: cof.result,
+      });
 
-    setLoad(false);
+      setLoad(false);
+    }
   };
 
   return (
@@ -63,10 +69,10 @@ export const PoolTransaction = () => {
               </InputGroup.Button>
             </Whisper>
           </InputGroup>
-          {result.errorMessages !== [] &&
+          {/* {result.errorMessages !== [] &&
             result.errorMessages.map((message: string) => {
               return <h5 className="redText">{message}</h5>;
-            })}
+            })} */}
           <Divider />
           <h6>Pool Pair 1 Liquidity</h6>
           <InputGroup>
