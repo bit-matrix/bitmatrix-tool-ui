@@ -53,6 +53,7 @@ export const poolTransaction = async (transactionId: string) => {
     output1: { ...output },
     output2: { ...output },
   };
+
   let case4outputs = {
     output1: { ...output },
     output2: { ...output },

@@ -106,7 +106,10 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
 
   const scriptPubkey = utils.publicKeyToScriptPubkey(publicKey);
 
+  let outputTemplateCount = "07";
+
   if (case3outputs.output1.value !== 0) {
+    outputTemplateCount = "08";
     settlementOutputs +=
       "01" +
       hexLE(case3outputs.output1.assetId) +
@@ -145,7 +148,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
 
   const locktime = "00000000";
 
-  const outputTemplate = methodCall === "03" ? "08" : "07" + output1 + output2 + output3 + output4 + settlementOutputs + serviceFeeOutput + txFeeOutput + locktime;
+  const outputTemplate = outputTemplateCount + output1 + output2 + output3 + output4 + settlementOutputs + serviceFeeOutput + txFeeOutput + locktime;
 
   // ------------- OUTPUTS END -------------
 
@@ -300,9 +303,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     commitmentWitnessFinal +
     "000000000000000000000000000000";
 
-  console.log("inputs:", inputTemplate);
   console.log("outputs:", outputTemplate);
-  console.log("witness:", witnessTemplate);
 
   return { inputTemplate, outputTemplate, witnessTemplate, rawHex: inputTemplate + outputTemplate + witnessTemplate };
 };
