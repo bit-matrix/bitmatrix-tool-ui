@@ -192,7 +192,7 @@ export const commitmentTxOutputsFragmentation = async (txId: string) => {
     };
   });
 
-  let isAddLiquidity: boolean = false;
+  let isAddLiquidity: boolean = methodCall === "03" ? true : false;
   let commitmentOutputResult: any = undefined;
 
   commitmentOutputResult = commitmentOutput.commitmentOutputTapscript(poolId, publicKey, isAddLiquidity);
