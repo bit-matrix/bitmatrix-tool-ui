@@ -8,43 +8,37 @@ import Decimal from "decimal.js";
 
 const lbtcAssest = "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49";
 const poolDetail = {
-  id: "d3ffddaf4e61517bd0a538507d4164a8881edfd38329e0112338fd1894c2c0d1",
+  id: "0b427dc1862dc6d658ccd109b8d54cf0dcd8848626c2bdb5e0ddce0f17383ff7",
   quote: {
     ticker: "tL-BTC",
     name: "Liquid Bitcoin",
-    asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
-    value: "20000000",
+    assetHash: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
+    value: "209442",
   },
   token: {
     ticker: "tL-USDt",
     name: "Liquid Tether",
-    asset: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
-    value: "600000000000",
+    assetHash: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
+    value: "95550000000",
   },
   lp: {
-    ticker: "5326",
+    ticker: "fc65",
     name: "unknown",
-    asset: "53265881ac18ccc7b0c4e8c5b2238bf05163a7bb1a5a8d0152e32c83d9db035f",
-    value: "1999800000",
+    assetHash: "fc65994dc9467dc99f35cbe7382d0adad3519aaade30e023d79d70c41f63a232",
+    value: "1999999200",
   },
   initialTx: {
-    txid: "e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0",
-    block_height: 379558,
-    block_hash: "8c11b11e9c59b3ea5819565630a9f19a350ea8eabea0bd975ae1d492ceb898b6",
+    txid: "e3094b74a3db4f83b472531d6564a3e94b956c661fe94296d4da22c7a8624415",
+    block_height: 447661,
+    block_hash: "7fa6f90f1b8bfe5c9e5aeecda0441cc2814a9374c73ee9e22f8ed1ec6af4bc35",
   },
-  lastSyncedBlock: {
-    block_height: 381436,
-    block_hash: "44340f3f93fd21859b1f4a379d172c95b4214dfd6e639d5b7a9fc6d2b669e5e0",
-  },
-  bestBlockHeight: 385093,
-  synced: false,
   unspentTx: {
-    txid: "e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0",
-    block_height: 379558,
-    block_hash: "8c11b11e9c59b3ea5819565630a9f19a350ea8eabea0bd975ae1d492ceb898b6",
+    txid: "01e66d46ad9b2d41d9634b8bcf9fe31eca3b3f2b2af7b368c56034f4e4d490ed",
+    block_height: 448541,
+    block_hash: "d4102f4f10c1c8673bc8b335e0924338d8b5c3c908a77f5fa341ee76387d3c71",
   },
-  lastSentPtx: "e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0",
-  active: true,
+  leafCount: 1,
+  pair1_coefficient: { number: 50 },
 };
 
 export const commitmentTxOutputsFragmentation = async (txId: string) => {
@@ -127,9 +121,9 @@ export const commitmentTxOutputsFragmentation = async (txId: string) => {
   //const poolReq = await axios.get(`https://rocksdb.basebitmatrix.com/pools/${poolId}`);
   //const poolDetail: Pool = poolReq.data;
 
-  const pair1Asset = poolDetail.quote.asset;
+  const pair1Asset = poolDetail.quote.assetHash;
 
-  const pair2Asset = poolDetail.token.asset;
+  const pair2Asset = poolDetail.token.assetHash;
 
   let output2PairValue = "00";
 
@@ -218,6 +212,7 @@ export const commitmentTxOutputsFragmentation = async (txId: string) => {
     changeOutputFinal,
     seperatedChangeOutputs,
     poolId,
+    pool: poolDetail,
     methodCall,
     publicKey,
     slippageTolerance,
