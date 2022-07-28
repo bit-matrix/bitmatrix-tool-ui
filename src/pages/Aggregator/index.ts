@@ -89,7 +89,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     "01" +
     hexLE(lp_asset_id) +
     "01" +
-    convertion.numToLE64LE(WizData.fromNumber(result.new_pool_lp_liquidity)).hex +
+    convertion.numToLE64LE(WizData.fromNumber(result.new_pool_lp_supply)).hex +
     "00" +
     utils.compactSizeVarInt(lpHolderCovenantScriptPubkey) +
     lpHolderCovenantScriptPubkey;
