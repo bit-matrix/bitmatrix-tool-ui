@@ -35,6 +35,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     inputCount,
     cmtOutput3PairValue,
     cmtOutputFeeHexValue,
+    case4outputs,
   } = await poolTransaction(txId);
 
   // ------------- INPUTS START -------------
@@ -109,28 +110,56 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
 
   let outputTemplateCount = 7;
 
-  if (case3outputs.output1.value !== 0) {
-    outputTemplateCount = 8;
-    settlementOutputs +=
-      "01" +
-      hexLE(case3outputs.output1.assetId) +
-      "01" +
-      convertion.numToLE64LE(WizData.fromNumber(case3outputs.output1.value)).hex +
-      "001600" +
-      utils.compactSizeVarInt(scriptPubkey) +
-      scriptPubkey;
+  if (methodCall === "03") {
+    if (case3outputs.output1.value !== 0) {
+      outputTemplateCount = 8;
+      settlementOutputs +=
+        "01" +
+        hexLE(case3outputs.output1.assetId) +
+        "01" +
+        convertion.numToLE64LE(WizData.fromNumber(case3outputs.output1.value)).hex +
+        "001600" +
+        utils.compactSizeVarInt(scriptPubkey) +
+        scriptPubkey;
 
-    settlementOutputs +=
-      "01" +
-      hexLE(case3outputs.output2.assetId) +
-      "01" +
-      convertion.numToLE64LE(WizData.fromNumber(case3outputs.output2.value)).hex +
-      "001600" +
-      utils.compactSizeVarInt(scriptPubkey) +
-      scriptPubkey;
-  } else {
-    settlementOutputs +=
-      "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "001600" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
+      settlementOutputs +=
+        "01" +
+        hexLE(case3outputs.output2.assetId) +
+        "01" +
+        convertion.numToLE64LE(WizData.fromNumber(case3outputs.output2.value)).hex +
+        "001600" +
+        utils.compactSizeVarInt(scriptPubkey) +
+        scriptPubkey;
+    } else {
+      settlementOutputs +=
+        "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "001600" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
+    }
+  }
+
+  if (methodCall === "04") {
+    if (case4outputs.output1.value !== 0) {
+      outputTemplateCount = 8;
+      settlementOutputs +=
+        "01" +
+        hexLE(case4outputs.output1.assetId) +
+        "01" +
+        convertion.numToLE64LE(WizData.fromNumber(case4outputs.output1.value)).hex +
+        "001600" +
+        utils.compactSizeVarInt(scriptPubkey) +
+        scriptPubkey;
+
+      settlementOutputs +=
+        "01" +
+        hexLE(case4outputs.output2.assetId) +
+        "01" +
+        convertion.numToLE64LE(WizData.fromNumber(case4outputs.output2.value)).hex +
+        "001600" +
+        utils.compactSizeVarInt(scriptPubkey) +
+        scriptPubkey;
+    } else {
+      settlementOutputs +=
+        "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "001600" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
+    }
   }
 
   const orderingFeeNumber = parseInt(hexLE(orderingFee), 16);
