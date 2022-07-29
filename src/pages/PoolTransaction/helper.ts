@@ -3,26 +3,25 @@ import Decimal from "decimal.js";
 import { convertion } from "@script-wiz/lib-core";
 import WizData from "@script-wiz/wiz-data";
 import { CTXPTXResult } from "./CTXPTXResult";
-import axios from "axios";
 
 // export const poolData = {
 //   id: "0b427dc1862dc6d658ccd109b8d54cf0dcd8848626c2bdb5e0ddce0f17383ff7",
 //   quote: {
 //     ticker: "tL-BTC",
 //     name: "Liquid Bitcoin",
-//     assetHash: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
+//     asset: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
 //     value: "210537",
 //   },
 //   token: {
 //     ticker: "tL-USDt",
 //     name: "Liquid Tether",
-//     assetHash: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
+//     asset: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
 //     value: "96050000000",
 //   },
 //   lp: {
 //     ticker: "fc65",
 //     name: "unknown",
-//     assetHash: "fc65994dc9467dc99f35cbe7382d0adad3519aaade30e023d79d70c41f63a232",
+//     asset: "fc65994dc9467dc99f35cbe7382d0adad3519aaade30e023d79d70c41f63a232",
 //     value: "1999999196",
 //   },
 //   initialTx: {
@@ -42,15 +41,7 @@ import axios from "axios";
 export const poolTransaction = async (transactionId: string) => {
   const cof = await commitmentTxOutputsFragmentation(transactionId);
 
-  const poolData = await axios
-    .get<any>("https://raw.githubusercontent.com/bit-matrix/bitmatrix-app-config/master/testpool.json")
-    .then((response) => {
-      return response.data;
-    })
-    .catch((err) => {
-      return err;
-    });
-
+  const poolData = await (await fetch("https://raw.githubusercontent.com/bit-matrix/bitmatrix-app-config/master/testpool.json")).json();
   const method = cof.methodCall;
 
   let errorMessages = [];
@@ -130,10 +121,10 @@ export const poolTransaction = async (transactionId: string) => {
   // commitment Output2 Asset Id
   const commitmentOutput2AssetId = commitmentOutput2.asset;
 
-  //pool detail rocks db den geldiği için asset, yeni pool modelde assetHash olacak
-  const pair_1_asset_id = poolData.quote.assetHash;
-  const pair_2_asset_id = poolData.token.assetHash;
-  const lp_asset_id = poolData.lp.assetHash;
+  //pool detail rocks db den geldiği için asset, yeni pool modelde asset olacak
+  const pair_1_asset_id = poolData.quote.asset;
+  const pair_2_asset_id = poolData.token.asset;
+  const lp_asset_id = poolData.lp.asset;
 
   const pair_1_pool_supply = Number(poolData.quote.value);
 
@@ -387,7 +378,7 @@ export const poolTransaction = async (transactionId: string) => {
       // pool_pair_2_liquidity değerine user_pair_2_supply_total değerini ekle ve sonuca new_pool_pair_2_liquidity ismini ver. Bu değeri havuzun güncel pair 2 liquidity miktarı olarak ata.
       // pool_lp_supply değerinden user_lp_received değerini çıkar ve sonuca new_pool_lp_supply ismini ver. Bu değeri havuzun güncel lp supply miktarı olarak ata.
 
-      output.assetId = poolData.lp.assetHash;
+      output.assetId = poolData.lp.asset;
       output.value = result.user_lp_received;
       result.new_pool_pair_1_liquidity = Math.floor(pool_pair_1_liquidity + result.user_pair_1_supply_total);
       result.new_pool_pair_2_liquidity = Math.floor(pool_pair_2_liquidity + result.user_pair_2_supply_total);
