@@ -134,9 +134,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
       settlementOutputs +=
         "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "001600" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
     }
-  }
-
-  if (methodCall === "04") {
+  } else if (methodCall === "04") {
     if (case4outputs.output1.value !== 0) {
       console.log(case4outputs);
       outputTemplateCount = 8;
@@ -161,6 +159,9 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
       settlementOutputs +=
         "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "001600" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
     }
+  } else {
+    settlementOutputs +=
+      "01" + hexLE(output.assetId) + "01" + convertion.numToLE64LE(WizData.fromNumber(output.value)).hex + "001600" + utils.compactSizeVarInt(scriptPubkey) + scriptPubkey;
   }
 
   const orderingFeeNumber = parseInt(hexLE(orderingFee), 16);
