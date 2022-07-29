@@ -3,43 +3,54 @@ import Decimal from "decimal.js";
 import { convertion } from "@script-wiz/lib-core";
 import WizData from "@script-wiz/wiz-data";
 import { CTXPTXResult } from "./CTXPTXResult";
+import axios from "axios";
 
-export const poolData = {
-  id: "0b427dc1862dc6d658ccd109b8d54cf0dcd8848626c2bdb5e0ddce0f17383ff7",
-  quote: {
-    ticker: "tL-BTC",
-    name: "Liquid Bitcoin",
-    assetHash: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
-    value: "210537",
-  },
-  token: {
-    ticker: "tL-USDt",
-    name: "Liquid Tether",
-    assetHash: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
-    value: "96050000000",
-  },
-  lp: {
-    ticker: "fc65",
-    name: "unknown",
-    assetHash: "fc65994dc9467dc99f35cbe7382d0adad3519aaade30e023d79d70c41f63a232",
-    value: "1999999196",
-  },
-  initialTx: {
-    txid: "e3094b74a3db4f83b472531d6564a3e94b956c661fe94296d4da22c7a8624415",
-    block_height: 447661,
-    block_hash: "7fa6f90f1b8bfe5c9e5aeecda0441cc2814a9374c73ee9e22f8ed1ec6af4bc35",
-  },
-  unspentTx: {
-    txid: "d9873d3118d5dd08644027b7e2a6abfd035c0470b8c80d99b2fcb042d98b5d0c",
-    block_height: 450143,
-    block_hash: "d9873d3118d5dd08644027b7e2a6abfd035c0470b8c80d99b2fcb042d98b5d0c",
-  },
-  leafCount: 1,
-  pair1_coefficient: 50,
-};
+// export const poolData = {
+//   id: "0b427dc1862dc6d658ccd109b8d54cf0dcd8848626c2bdb5e0ddce0f17383ff7",
+//   quote: {
+//     ticker: "tL-BTC",
+//     name: "Liquid Bitcoin",
+//     assetHash: "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49",
+//     value: "210537",
+//   },
+//   token: {
+//     ticker: "tL-USDt",
+//     name: "Liquid Tether",
+//     assetHash: "f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958",
+//     value: "96050000000",
+//   },
+//   lp: {
+//     ticker: "fc65",
+//     name: "unknown",
+//     assetHash: "fc65994dc9467dc99f35cbe7382d0adad3519aaade30e023d79d70c41f63a232",
+//     value: "1999999196",
+//   },
+//   initialTx: {
+//     txid: "e3094b74a3db4f83b472531d6564a3e94b956c661fe94296d4da22c7a8624415",
+//     block_height: 447661,
+//     block_hash: "7fa6f90f1b8bfe5c9e5aeecda0441cc2814a9374c73ee9e22f8ed1ec6af4bc35",
+//   },
+//   unspentTx: {
+//     txid: "d9873d3118d5dd08644027b7e2a6abfd035c0470b8c80d99b2fcb042d98b5d0c",
+//     block_height: 450143,
+//     block_hash: "d9873d3118d5dd08644027b7e2a6abfd035c0470b8c80d99b2fcb042d98b5d0c",
+//   },
+//   leafCount: 1,
+//   pair1_coefficient: 50,
+// };
 
 export const poolTransaction = async (transactionId: string) => {
   const cof = await commitmentTxOutputsFragmentation(transactionId);
+
+  const poolData = await axios
+    .get<any>("https://raw.githubusercontent.com/bit-matrix/bitmatrix-app-config/master/testpool.json")
+    .then((response) => {
+      return response.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+
   const method = cof.methodCall;
 
   let errorMessages = [];
