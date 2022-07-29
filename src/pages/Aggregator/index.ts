@@ -76,7 +76,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
   const tokenCovenantScriptPubkey = taproot.tapRoot(pubkey, script, TAPROOT_VERSION.LIQUID).scriptPubkey.hex;
   const lpHolderCovenantScriptPubkey = tokenCovenantScriptPubkey;
   const poolMainCovenantScriptPubkey = poolMainCovenant.taprootResult.scriptPubkey.hex;
-
+  console.log(result.new_pool_lp_liquidity);
   const output1 = "01" + hexLE(poolId) + "01" + "0000000000000001" + "00" + utils.compactSizeVarInt(flagCovenantScriptPubkey) + flagCovenantScriptPubkey;
   const output2 =
     "01" +
@@ -90,7 +90,7 @@ export const createPoolTx = async (txId = "7d61555957038bd1f1f0e9eb6ba223b319d69
     "01" +
     hexLE(lp_asset_id) +
     "01" +
-    convertion.numToLE64LE(WizData.fromNumber(result.new_pool_lp_liquidity)).hex +
+    convertion.numToLE64LE(WizData.fromNumber(methodCall === "03" ? result.new_pool_lp_supply : result.new_pool_lp_liquidity)).hex +
     "00" +
     utils.compactSizeVarInt(lpHolderCovenantScriptPubkey) +
     lpHolderCovenantScriptPubkey;
